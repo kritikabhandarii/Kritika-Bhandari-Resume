@@ -143,7 +143,12 @@ const ResumeData = {
       veg: true,
       logo: "/images/canvacapcut.png",
       bonusNotes: [
-        { text: "Comes with 10M-view Insta reel pacing & visual instincts 🎬" },
+        {
+          before: "You see.. I love creativity and video editing so much that I even created a video-spotify-wrapped cv. You can check it out ",
+          linkText: "here",
+          after: ".",
+          url: "https://vimeo.com/1152148247?fl=ip&fe=ec",
+        },
       ],
     },
     {
