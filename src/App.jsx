@@ -154,22 +154,12 @@ const ResumeData = {
   ],
 };
 
-const AddOnOptions = [
-  {
-    id: "addon1",
-    label: "Live n8n Automation Walkthrough",
-    tag: "Free",
-  },
-  {
-    id: "addon2",
-    label: "HubSpot Campaign & Content Samples",
-    tag: "Free",
-  },
-  {
-    id: "addon3",
-    label: "Summer Internship Slot (March – June 2027)",
-    tag: "Priority",
-  },
+const FunPointers = [
+  "Can sing Doraemon in Japanese 🎶",
+  'Can order a whole meal in Spanish — "¿Cuál es la especialidad de la casa?" 🌮',
+  'Jamming to German metal bands — "Hier kommt die Sonne" Rammstein! 🤘',
+  "Elite 12 AM McDonald's on Zomato ordering instincts 🍔",
+  "Comes with 10M-view Insta reel energy (no extra charge) ✨",
 ];
 
 const VegIcon = () => (
@@ -182,7 +172,6 @@ export default function ZomatoResume() {
   const [activeTab, setActiveTab] = useState("Experience");
   const [scrolled, setScrolled] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [selectedAddOns, setSelectedAddOns] = useState(["addon3"]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
@@ -205,30 +194,17 @@ export default function ZomatoResume() {
     });
   };
 
-  const toggleAddOn = (id) => {
-    setSelectedAddOns((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
   const buildOrderMessage = () => {
     const itemLines = cartItems
       .map((item) => `• ${item.title} (${item.subtitle})`)
       .join("\n");
-    const addOnLines = AddOnOptions.filter((a) =>
-      selectedAddOns.includes(a.id)
-    )
-      .map((a) => `• ${a.label}`)
-      .join("\n");
 
-    return `Hi Kritika! I checked out your Zomato-style resume and shortlisted these items for our team:\n\n${itemLines}${
-      addOnLines ? `\n\nRequested Add-ons:\n${addOnLines}` : ""
-    }\n\nLet's connect for a quick chat!`;
+    return `Hi Kritika! I checked out your Zomato-style resume and added these to my order:\n\n${itemLines}\n\nLet's connect for a chat!`;
   };
 
   const handleEmailCheckout = () => {
     const subject = encodeURIComponent(
-      `Interview / Internship Shortlist (${cartItems.length} items) – Kritika Bhandari`
+      `Zomato CV Order (${cartItems.length} items) – Kritika Bhandari`
     );
     const body = encodeURIComponent(buildOrderMessage());
     window.location.href = `mailto:kritikabhandari03@gmail.com?subject=${subject}&body=${body}`;
@@ -600,7 +576,7 @@ export default function ZomatoResume() {
                             </button>
                           </div>
                           <div className="text-[10px] text-gray-400 mt-2 text-center">
-                            {isAdded ? "in shortlist" : "customizable"}
+                            {isAdded ? "in your plate" : "customizable"}
                           </div>
                         </div>
                       </div>
@@ -634,7 +610,7 @@ export default function ZomatoResume() {
                   {cartItems.length === 1 ? "Item Added" : "Items Added"}
                 </span>
                 <span className="text-xs text-red-100">
-                  Tap to review shortlist & add-ons
+                  Tap to view plate & bonus lore
                 </span>
               </div>
               <span className="bg-white text-[#E23744] px-3.5 py-2 rounded-lg font-bold text-xs shadow-sm flex items-center gap-1 uppercase tracking-wide">
@@ -653,10 +629,10 @@ export default function ZomatoResume() {
                 <div>
                   <h3 className="font-black text-gray-900 text-base flex items-center gap-2">
                     <ShoppingCart size={18} className="text-[#E23744]" />
-                    Your Candidate Cart
+                    Your Candidate Order
                   </h3>
                   <p className="text-xs text-gray-500">
-                    Kritika Bhandari • Product Ops & Automation
+                    Kritika Bhandari • Freshly Plated for Your Team
                   </p>
                 </div>
                 <button
@@ -673,7 +649,7 @@ export default function ZomatoResume() {
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                      Selected Highlights ({cartItems.length})
+                      Items in Plate ({cartItems.length})
                     </span>
                     <button
                       onClick={() => {
@@ -716,69 +692,41 @@ export default function ZomatoResume() {
                   </div>
                 </div>
 
-                {/* Add-ons Section ("Complete Your Offer") */}
+                {/* Fun Pointers Section (No Checkboxes!) */}
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-3">
-                    Complete Your Offer (Optional Add-ons)
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2.5">
+                    Chef's Special Notes & Bonus Lore
                   </span>
-                  <div className="space-y-2.5">
-                    {AddOnOptions.map((addon) => {
-                      const checked = selectedAddOns.includes(addon.id);
-                      return (
-                        <button
-                          key={addon.id}
-                          onClick={() => toggleAddOn(addon.id)}
-                          className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
-                            checked
-                              ? "border-[#E23744] bg-red-50/40"
-                              : "border-gray-200 hover:bg-gray-50"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <div
-                              className={`w-4 h-4 rounded flex items-center justify-center border ${
-                                checked
-                                  ? "bg-[#E23744] border-[#E23744] text-white"
-                                  : "border-gray-300 bg-white"
-                              }`}
-                            >
-                              {checked && (
-                                <Check size={12} className="stroke-[3]" />
-                              )}
-                            </div>
-                            <span className="text-xs font-semibold text-gray-800">
-                              {addon.label}
-                            </span>
-                          </div>
-                          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-green-50 text-green-700">
-                            {addon.tag}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <ul className="space-y-2 text-xs text-gray-700">
+                    {FunPointers.map((pointer, idx) => (
+                      <li key={idx} className="flex items-start gap-2 leading-relaxed">
+                        <span className="text-[#E23744] font-black mt-0.5">•</span>
+                        <span>{pointer}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* Zomato-style Bill Summary */}
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2 text-xs">
                   <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
-                    Offer Summary
+                    Bill Details
                   </span>
                   <div className="flex justify-between text-gray-600">
-                    <span>Shortlisted Traits</span>
+                    <span>Selected Highlights</span>
                     <span className="font-semibold text-gray-900">
                       {cartItems.length} items
                     </span>
                   </div>
                   <div className="flex justify-between text-gray-600">
-                    <span>Joining Window</span>
+                    <span>Estimated Delivery</span>
                     <span className="font-semibold text-gray-900">
                       March – June 2027
                     </span>
                   </div>
                   <div className="flex justify-between text-gray-600">
-                    <span>Culture Fit & Enthusiasm Fee</span>
-                    <span className="font-bold text-green-600">FREE</span>
+                    <span>Good Vibes & Meme Tax</span>
+                    <span className="font-bold text-green-600">₹0 (FREE)</span>
                   </div>
                 </div>
               </div>
@@ -790,14 +738,14 @@ export default function ZomatoResume() {
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
                 >
                   <MessageCircle size={16} />
-                  WhatsApp Shortlist
+                  WhatsApp Order
                 </button>
                 <button
                   onClick={handleEmailCheckout}
                   className="flex-1 bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
                 >
                   <Mail size={16} />
-                  Send via Email
+                  Email Order
                 </button>
               </div>
             </div>
