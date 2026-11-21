@@ -33,6 +33,9 @@ const ResumeData = {
       tag: "Bestseller",
       veg: true,
       logo: "/images/niswey.png",
+      bonusNotes: [
+        "Turned campaign handoffs into repeatable checklists so launches stopped stalling.",
+      ],
     },
     {
       id: "exp2",
@@ -43,6 +46,9 @@ const ResumeData = {
       tag: "Must Try",
       veg: true,
       logo: "/images/malikaka.png",
+      bonusNotes: [
+        "Batch-edited short-form cuts so hooks stayed punchy across formats.",
+      ],
     },
   ],
   education: [
@@ -54,6 +60,9 @@ const ResumeData = {
       desc: "Specialization in Digital and Telecom Management ",
       veg: true,
       logo: "/images/symbiosis-logo.png",
+      bonusNotes: [
+        "Connecting ops systems and telecom/digital workflows to real business metrics.",
+      ],
     },
     {
       id: "edu1",
@@ -93,6 +102,9 @@ const ResumeData = {
       tag: "Spicy",
       veg: true,
       logo: "/images/hubspot.png",
+      bonusNotes: [
+        "Loves untangling messy lead routing and lifecycle properties.",
+      ],
     },
     {
       id: "sk2",
@@ -103,6 +115,9 @@ const ResumeData = {
       veg: true,
       link: "https://docs.google.com/presentation/d/1xEL5zlJBkbxnfqdY15UpToHsGw0nE5OeCbOHefBVZ1M/edit?usp=sharing",
       logo: "/images/n8n.png",
+      bonusNotes: [
+        "Builds small automations first to prove the logic before scaling.",
+      ],
     },
     {
       id: "sk3",
@@ -112,6 +127,9 @@ const ResumeData = {
       desc: "Plating up scroll-stopping graphic designs, custom illustrations, and crisp video edits.",
       veg: true,
       logo: "/images/canvacapcut.png",
+      bonusNotes: [
+        "Comes with 10M-view Insta reel energy (no extra charge) ✨",
+      ],
     },
     {
       id: "sk4",
@@ -121,6 +139,10 @@ const ResumeData = {
       desc: "A multilingual combo platter: fluent in English & Hindi, with a side of beginner German and intermediate Spanish.",
       veg: true,
       logo: "/images/lang.png",
+      bonusNotes: [
+        'Can order a whole meal in Spanish — "¿Cuál es la especialidad de la casa?" 🌮',
+        'Jamming to German metal bands — "Hier kommt die Sonne" Rammstein! 🤘',
+      ],
     },
   ],
   interests: [
@@ -132,6 +154,10 @@ const ResumeData = {
       desc: "Love strumming the ukulele, though sometimes the chords can be questionable.",
       veg: true,
       logo: "/images/uke.png",
+      bonusNotes: [
+        "Can sing Doraemon in Japanese 🎶",
+        "Ukulele chords are enthusiast-grade rather than conservatory-grade.",
+      ],
     },
     {
       id: "int2",
@@ -141,6 +167,9 @@ const ResumeData = {
       desc: "Big on digital art. One of my reels even hit 10M views on Insta (not to brag XD).",
       veg: true,
       logo: "/images/art.png",
+      bonusNotes: [
+        "Comes with 10M-view Insta reel energy (no extra charge) ✨",
+      ],
     },
     {
       id: "int4",
@@ -150,15 +179,15 @@ const ResumeData = {
       desc: "I often find comfort in reading murder novels.",
       veg: true,
       logo: "/images/novel.png",
+      bonusNotes: [
+        "Plot twists and mystery pacing keep downtime interesting.",
+      ],
     },
   ],
 };
 
-const FunPointers = [
-  "Can sing Doraemon in Japanese",
-  'Can order a whole meal in Spanish, "¿Cuál es la especialidad de la casa?" 🌮',
-  'Jamming to German metal bands: "Hier kommt die Sonne" Rammstein! 🤘',
-  
+const FallbackLore = [
+  "Elite 12 AM McDonald's on Zomato ordering instincts 🍔",
 ];
 
 const VegIcon = () => (
@@ -172,6 +201,7 @@ export default function ZomatoResume() {
   const [scrolled, setScrolled] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showAllLore, setShowAllLore] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -193,9 +223,29 @@ export default function ZomatoResume() {
     });
   };
 
+  // Build per-item lore groups only for items currently in the cart
+  const selectedLoreGroups = cartItems
+    .filter((item) => Array.isArray(item.bonusNotes) && item.bonusNotes.length > 0)
+    .map((item) => ({
+      id: item.id,
+      title: item.title,
+      notes: showAllLore ? item.bonusNotes : item.bonusNotes.slice(0, 1),
+      totalCount: item.bonusNotes.length,
+    }));
+
+  const hasExtraNotes = cartItems.some(
+    (item) => Array.isArray(item.bonusNotes) && item.bonusNotes.length > 1
+  );
+
   const buildOrderMessage = () => {
     const itemLines = cartItems
-      .map((item) => `• ${item.title} (${item.subtitle})`)
+      .map((item) => {
+        const notes =
+          Array.isArray(item.bonusNotes) && item.bonusNotes.length > 0
+            ? `\n   ↳ ${item.bonusNotes[0]}`
+            : "";
+        return `• ${item.title} (${item.subtitle})${notes}`;
+      })
       .join("\n");
 
     return `Hi Kritika! I checked out your Zomato-style resume and added these to my order:\n\n${itemLines}\n\nLet's connect for a chat!`;
@@ -691,19 +741,64 @@ export default function ZomatoResume() {
                   </div>
                 </div>
 
-                {/* Fun Pointers Section (No Checkboxes!) */}
+                {/* Per-Item Bonus Lore Section */}
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2.5">
-                    Chef's Special Notes & Bonus Lore
-                  </span>
-                  <ul className="space-y-2 text-xs text-gray-700">
-                    {FunPointers.map((pointer, idx) => (
-                      <li key={idx} className="flex items-start gap-2 leading-relaxed">
-                        <span className="text-[#E23744] font-black mt-0.5">•</span>
-                        <span>{pointer}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                      Item Notes & Bonus Lore
+                    </span>
+                    {hasExtraNotes && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllLore((prev) => !prev)}
+                        className="text-[11px] font-bold text-[#E23744] hover:underline"
+                      >
+                        {showAllLore ? "Show 1 per item" : "Show all notes"}
+                      </button>
+                    )}
+                  </div>
+
+                  {selectedLoreGroups.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedLoreGroups.map((group) => (
+                        <div
+                          key={`lore-${group.id}`}
+                          className="bg-gray-50 rounded-xl p-2.5 border border-gray-100"
+                        >
+                          <div className="text-[11px] font-bold text-gray-800 mb-1">
+                            {group.title}
+                          </div>
+                          <ul className="space-y-1.5 text-xs text-gray-600">
+                            {group.notes.map((note, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2 leading-relaxed"
+                              >
+                                <span className="text-[#E23744] font-black mt-0.5">
+                                  •
+                                </span>
+                                <span>{note}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <ul className="space-y-2 text-xs text-gray-700">
+                      {FallbackLore.map((pointer, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 leading-relaxed"
+                        >
+                          <span className="text-[#E23744] font-black mt-0.5">
+                            •
+                          </span>
+                          <span>{pointer}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 {/* Zomato-style Bill Summary */}
