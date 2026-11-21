@@ -432,13 +432,17 @@ export default function ZomatoResume() {
           </div>
 
           <div className="flex items-center gap-4 mt-6 border-b border-gray-100 pb-6">
-            <a
-              href="tel:+917900020593"
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-            >
-              <Phone size={18} className="text-gray-700" />
-              <span className="text-xs font-semibold text-gray-700">Call</span>
-            </a>
+           <a
+           href="https://www.linkedin.com/in/your-kritika-bhandari/"
+           target="_blank"
+           rel="noreferrer"
+           className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+         >
+           <Briefcase size={18} className="text-[#0A66C2]" />
+           <span className="text-xs font-semibold text-gray-700">
+             LinkedIn
+           </span>
+         </a>
             <a
               href="mailto:kritikabhandari03@gmail.com"
               className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
