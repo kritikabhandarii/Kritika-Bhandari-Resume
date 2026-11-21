@@ -128,7 +128,7 @@ const ResumeData = {
       veg: true,
       logo: "/images/canvacapcut.png",
       bonusNotes: [
-        "Comes with 10M-view Insta reel energy (no extra charge) ✨",
+        "You can check out my art account here ✨",
       ],
     },
     {
@@ -168,7 +168,12 @@ const ResumeData = {
       veg: true,
       logo: "/images/art.png",
       bonusNotes: [
-        "Comes with 10M-view Insta reel energy (no extra charge) ✨",
+       {
+    before: "You can check out my art account ",
+    linkText: "here",
+    after: " ✨",
+    url: "https://www.instagram.com/gakiart?evlk=MWJuOWI0MmJ3bGwzbA%3D%3D&utm_source=qr",
+  },
       ],
     },
     {
