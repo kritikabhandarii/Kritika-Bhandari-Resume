@@ -277,14 +277,15 @@ export default function ZomatoResume() {
       `Zomato CV Order (${cartItems.length} items) – Kritika Bhandari`
     );
     const body = encodeURIComponent(buildOrderMessage());
-    window.location.href = `mailto:kritikabhandari03@gmail.com?subject=${subject}&body=${body}`;
-  };
-
-  const handleLinkedInCheckout = () => {
     window.open(
-      "https://www.linkedin.com/in/your-linkedin-username/",
+      `https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com&su=${subject}&body=${body}`,
       "_blank"
     );
+  };
+
+  const handleWhatsAppCheckout = () => {
+    const text = encodeURIComponent(buildOrderMessage());
+    window.open(`https://wa.me/917900020593?text=${text}`, "_blank");
   };
 
   const categories = [
@@ -437,9 +438,15 @@ export default function ZomatoResume() {
                   <X size={16} />
                 </button>
               ) : (
-                <div className="border-l pl-3 border-gray-200">
+                <a
+                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Schedule a quick chat on Google Calendar"
+                  className="border-l pl-3 border-gray-200 hover:opacity-75 transition-opacity flex items-center"
+                >
                   <Clock size={18} className="text-[#E23744]" />
-                </div>
+                </a>
               )}
             </div>
           </div>
@@ -487,7 +494,9 @@ export default function ZomatoResume() {
                   </span>
                 </a>
                 <a
-                  href="mailto:kritikabhandari03@gmail.com"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
                 >
                   <Mail size={18} className="text-gray-700" />
@@ -875,11 +884,11 @@ export default function ZomatoResume() {
 
               <div className="bg-white p-4 border-t border-gray-200 flex gap-2.5">
                 <button
-                  onClick={handleLinkedInCheckout}
-                  className="flex-1 bg-[#0A66C2] hover:bg-[#004182] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                  onClick={handleWhatsAppCheckout}
+                  className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
                 >
-                  <Briefcase size={16} />
-                  LinkedIn Message
+                  <MessageCircle size={16} />
+                  WhatsApp Order
                 </button>
                 <button
                   onClick={handleEmailCheckout}
