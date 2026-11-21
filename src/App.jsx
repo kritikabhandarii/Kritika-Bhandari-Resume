@@ -5,10 +5,12 @@ import {
   Star,
   Phone,
   Mail,
-  Share2,
   MessageCircle,
   Info,
   Plus,
+  Check,
+  X,
+  Trash2,
   ArrowLeft,
   MoreVertical,
   Clock,
@@ -19,8 +21,6 @@ import {
   ChevronRight,
   ShoppingCart,
 } from "lucide-react";
-
-const BrandColor = "#E23744";
 
 const ResumeData = {
   experience: [
@@ -52,6 +52,7 @@ const ResumeData = {
       subtitle: "Symbiosis International University",
       date: "2026 - 2028",
       desc: "Specialization in Digital and Telecom Management ",
+      veg: true,
       logo: "/images/symbiosis-logo.png",
     },
     {
@@ -141,7 +142,6 @@ const ResumeData = {
       veg: true,
       logo: "/images/art.png",
     },
-
     {
       id: "int4",
       title: "Reading",
@@ -154,6 +154,24 @@ const ResumeData = {
   ],
 };
 
+const AddOnOptions = [
+  {
+    id: "addon1",
+    label: "Live n8n Automation Walkthrough",
+    tag: "Free",
+  },
+  {
+    id: "addon2",
+    label: "HubSpot Campaign & Content Samples",
+    tag: "Free",
+  },
+  {
+    id: "addon3",
+    label: "Summer Internship Slot (March – June 2027)",
+    tag: "Priority",
+  },
+];
+
 const VegIcon = () => (
   <div className="w-4 h-4 border border-green-600 flex items-center justify-center rounded-sm bg-white shrink-0">
     <div className="w-2 h-2 bg-green-600 rounded-full"></div>
@@ -163,7 +181,9 @@ const VegIcon = () => (
 export default function ZomatoResume() {
   const [activeTab, setActiveTab] = useState("Experience");
   const [scrolled, setScrolled] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [selectedAddOns, setSelectedAddOns] = useState(["addon3"]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,8 +193,50 @@ export default function ZomatoResume() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleHire = () => {
-    setCartCount((prev) => prev + 1);
+  const toggleCartItem = (item) => {
+    setCartItems((prev) => {
+      const exists = prev.some((i) => i.id === item.id);
+      if (exists) {
+        const updated = prev.filter((i) => i.id !== item.id);
+        if (updated.length === 0) setIsCartOpen(false);
+        return updated;
+      }
+      return [...prev, item];
+    });
+  };
+
+  const toggleAddOn = (id) => {
+    setSelectedAddOns((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const buildOrderMessage = () => {
+    const itemLines = cartItems
+      .map((item) => `• ${item.title} (${item.subtitle})`)
+      .join("\n");
+    const addOnLines = AddOnOptions.filter((a) =>
+      selectedAddOns.includes(a.id)
+    )
+      .map((a) => `• ${a.label}`)
+      .join("\n");
+
+    return `Hi Kritika! I checked out your Zomato-style resume and shortlisted these items for our team:\n\n${itemLines}${
+      addOnLines ? `\n\nRequested Add-ons:\n${addOnLines}` : ""
+    }\n\nLet's connect for a quick chat!`;
+  };
+
+  const handleEmailCheckout = () => {
+    const subject = encodeURIComponent(
+      `Interview / Internship Shortlist (${cartItems.length} items) – Kritika Bhandari`
+    );
+    const body = encodeURIComponent(buildOrderMessage());
+    window.location.href = `mailto:kritikabhandari03@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  const handleWhatsAppCheckout = () => {
+    const text = encodeURIComponent(buildOrderMessage());
+    window.open(`https://wa.me/917900020593?text=${text}`, "_blank");
   };
 
   const categories = [
@@ -292,15 +354,14 @@ export default function ZomatoResume() {
         {/* Full-Width Rectangular Banner Image (Pulls up behind header) */}
         <div className="relative h-64 w-full -mt-16 bg-gray-900">
           <img
-            src="/images/kritika.png" // <-- Paste your Cloudinary photo link here
+            src="/images/kritika.png"
             alt="Kritika Bhandari"
             className="w-full h-full object-cover object-center"
           />
-          {/* Dark top gradient so white header icons stay readable */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/20" />
         </div>
 
-        {/* Hero / Restaurant Info Section (Overlaps the banner with rounded top corners) */}
+        {/* Hero / Restaurant Info Section */}
         <div className="relative z-10 -mt-6 bg-white rounded-t-3xl px-4 pt-6 pb-6 shadow-sm">
           {/* Search Bar */}
           <div className="mb-5">
@@ -391,6 +452,7 @@ export default function ZomatoResume() {
             </p>
           </div>
         </div>
+
         <div className="bg-gray-100/50 pt-2 pb-32">
           {/* Menu Categories - Inline Nav */}
           {!scrolled && (
@@ -429,101 +491,121 @@ export default function ZomatoResume() {
                 </h2>
 
                 <div className="flex flex-col">
-                  {items.map((item, index) => (
-                    <div
-                      key={item.id}
-                      className={`py-6 flex gap-4 ${
-                        index !== items.length - 1
-                          ? "border-b border-dashed border-gray-200"
-                          : ""
-                      }`}
-                    >
-                      {/* Left Content */}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <VegIcon />
-                          {item.tag && (
-                            <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
-                              <Star size={8} className="fill-[#E23744]" />
-                              {item.tag}
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-gray-800 text-[15px] leading-tight mb-1">
-                          {item.title}
-                        </h3>
-                        <div className="text-sm font-medium text-gray-700 mb-1">
-                          {item.subtitle}
-                        </div>
-
-                        {item.date && (
-                          <div className="text-xs font-semibold text-gray-500 mb-2">
-                            {item.date}
+                  {items.map((item, index) => {
+                    const isAdded = cartItems.some((i) => i.id === item.id);
+                    return (
+                      <div
+                        key={item.id}
+                        className={`py-6 flex gap-4 ${
+                          index !== items.length - 1
+                            ? "border-b border-dashed border-gray-200"
+                            : ""
+                        }`}
+                      >
+                        {/* Left Content */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <VegIcon />
+                            {item.tag && (
+                              <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                <Star size={8} className="fill-[#E23744]" />
+                                {item.tag}
+                              </span>
+                            )}
                           </div>
-                        )}
+                          <h3 className="font-bold text-gray-800 text-[15px] leading-tight mb-1">
+                            {item.title}
+                          </h3>
+                          <div className="text-sm font-medium text-gray-700 mb-1">
+                            {item.subtitle}
+                          </div>
 
-                        {item.desc && (
-                          <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
-                            {item.desc}
-                          </p>
-                        )}
-
-                        {item.link && (
-                          <a
-                            href={item.link}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-block mt-2 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2 py-1 rounded-md hover:bg-red-50"
-                          >
-                            View Workflow →
-                          </a>
-                        )}
-                      </div>
-
-                      {/* Right Action / Image placeholder */}
-                      <div className="w-[110px] shrink-0 flex flex-col items-center">
-                        <div className="w-[110px] h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
-                          {/* If a logo exists, show it. Otherwise, show the icons */}
-                          {item.logo ? (
-                            <img
-                              src={item.logo}
-                              alt="Company Logo"
-                              className="w-full h-full object-contain p-2 bg-white"
-                            />
-                          ) : (
-                            <>
-                              {key === "experience" && (
-                                <Briefcase size={32} className="text-red-200" />
-                              )}
-                              {key === "education" && (
-                                <GraduationCap
-                                  size={32}
-                                  className="text-red-200"
-                                />
-                              )}
-                              {key === "skills" && (
-                                <Sparkles size={32} className="text-red-200" />
-                              )}
-                              {key === "interests" && (
-                                <Heart size={32} className="text-red-200" />
-                              )}
-                            </>
+                          {item.date && (
+                            <div className="text-xs font-semibold text-gray-500 mb-2">
+                              {item.date}
+                            </div>
                           )}
 
-                          {/* Add/Hire Button positioned overlapping the image bottom */}
-                          <button
-                            onClick={handleHire}
-                            className="absolute -bottom-0 left-1/2 -translate-x-1/2 w-[85%] bg-white text-[#E23744] border border-gray-200 font-black text-sm py-1.5 rounded-lg shadow-md hover:bg-gray-50 active:scale-95 transition-transform flex items-center justify-center gap-1 uppercase tracking-wide"
-                          >
-                            Hire <Plus size={14} className="stroke-[3]" />
-                          </button>
+                          {item.desc && (
+                            <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
+                              {item.desc}
+                            </p>
+                          )}
+
+                          {item.link && (
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-block mt-2 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2 py-1 rounded-md hover:bg-red-50"
+                            >
+                              View Workflow →
+                            </a>
+                          )}
                         </div>
-                        <div className="text-[10px] text-gray-400 mt-2 text-center">
-                          customizable
+
+                        {/* Right Action / Image placeholder */}
+                        <div className="w-[110px] shrink-0 flex flex-col items-center">
+                          <div className="w-[110px] h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
+                            {item.logo ? (
+                              <img
+                                src={item.logo}
+                                alt={item.subtitle}
+                                className="w-full h-full object-contain p-2 bg-white"
+                              />
+                            ) : (
+                              <>
+                                {key === "experience" && (
+                                  <Briefcase
+                                    size={32}
+                                    className="text-red-200"
+                                  />
+                                )}
+                                {key === "education" && (
+                                  <GraduationCap
+                                    size={32}
+                                    className="text-red-200"
+                                  />
+                                )}
+                                {key === "skills" && (
+                                  <Sparkles
+                                    size={32}
+                                    className="text-red-200"
+                                  />
+                                )}
+                                {key === "interests" && (
+                                  <Heart size={32} className="text-red-200" />
+                                )}
+                              </>
+                            )}
+
+                            {/* Zomato ADD + / ADDED Button */}
+                            <button
+                              onClick={() => toggleCartItem(item)}
+                              className={`absolute -bottom-0 left-1/2 -translate-x-1/2 w-[85%] font-black text-xs py-1.5 rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-1 uppercase tracking-wide ${
+                                isAdded
+                                  ? "bg-[#E23744] text-white border border-[#E23744]"
+                                  : "bg-white text-[#E23744] border border-red-200 hover:bg-red-50"
+                              }`}
+                            >
+                              {isAdded ? (
+                                <>
+                                  Added <Check size={14} className="stroke-[3]" />
+                                </>
+                              ) : (
+                                <>
+                                  Add <Plus size={14} className="stroke-[3]" />
+                                </>
+                              )}
+                            </button>
+                          </div>
+                          <div className="text-[10px] text-gray-400 mt-2 text-center">
+                            {isAdded ? "in shortlist" : "customizable"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -538,27 +620,186 @@ export default function ZomatoResume() {
           </div>
         </div>
 
-        {/* Floating Checkout/Contact Bar */}
-        {cartCount > 0 && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-            <div className="bg-[#E23744] rounded-xl shadow-2xl p-3 flex items-center justify-between text-white">
+        {/* Floating Bottom Bar - Opens the Cart Drawer */}
+        {cartItems.length > 0 && !isCartOpen && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] z-40">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="w-full bg-[#E23744] hover:bg-[#d32f3c] rounded-xl shadow-2xl p-3.5 flex items-center justify-between text-white active:scale-[0.99] transition-all text-left"
+            >
               <div className="flex flex-col">
-                <span className="font-bold text-sm flex items-center gap-1">
-                  <ShoppingCart size={14} />
-                  {cartCount} {cartCount === 1 ? "Skill Added" : "Skills Added"}
+                <span className="font-bold text-sm flex items-center gap-1.5">
+                  <ShoppingCart size={15} />
+                  {cartItems.length}{" "}
+                  {cartItems.length === 1 ? "Item Added" : "Items Added"}
                 </span>
                 <span className="text-xs text-red-100">
-                  Ready to make an offer?
+                  Tap to review shortlist & add-ons
                 </span>
               </div>
-              <button
-                onClick={() =>
-                  (window.location.href = "mailto:kritikabhandari03@gmail.com")
-                }
-                className="bg-white text-[#E23744] px-4 py-2 rounded-lg font-bold text-sm shadow-sm active:scale-95 transition-transform flex items-center gap-1"
-              >
-                Contact Now <ChevronRight size={16} />
-              </button>
+              <span className="bg-white text-[#E23744] px-3.5 py-2 rounded-lg font-bold text-xs shadow-sm flex items-center gap-1 uppercase tracking-wide">
+                View Cart <ChevronRight size={15} />
+              </span>
+            </button>
+          </div>
+        )}
+
+        {/* Interactive Zomato Cart Drawer */}
+        {isCartOpen && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-[1px]">
+            <div className="w-full max-w-md bg-gray-50 rounded-t-3xl shadow-2xl max-h-[85vh] flex flex-col overflow-hidden">
+              {/* Drawer Header */}
+              <div className="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="font-black text-gray-900 text-base flex items-center gap-2">
+                    <ShoppingCart size={18} className="text-[#E23744]" />
+                    Your Candidate Cart
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    Kritika Bhandari • Product Ops & Automation
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Scrollable Cart Body */}
+              <div className="p-4 overflow-y-auto space-y-4 flex-1">
+                {/* Selected Items List */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                      Selected Highlights ({cartItems.length})
+                    </span>
+                    <button
+                      onClick={() => {
+                        setCartItems([]);
+                        setIsCartOpen(false);
+                      }}
+                      className="text-xs font-semibold text-[#E23744] hover:underline flex items-center gap-1"
+                    >
+                      <Trash2 size={12} /> Clear all
+                    </button>
+                  </div>
+
+                  <div className="divide-y divide-dashed divide-gray-200">
+                    {cartItems.map((item) => (
+                      <div
+                        key={`cart-${item.id}`}
+                        className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
+                      >
+                        <div className="flex items-start gap-2.5">
+                          <div className="mt-1">
+                            <VegIcon />
+                          </div>
+                          <div>
+                            <div className="font-bold text-sm text-gray-800">
+                              {item.title}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {item.subtitle}
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => toggleCartItem(item)}
+                          className="text-xs font-bold text-[#E23744] border border-red-200 bg-red-50/50 hover:bg-red-100 px-2.5 py-1 rounded-lg shrink-0"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Add-ons Section ("Complete Your Offer") */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-3">
+                    Complete Your Offer (Optional Add-ons)
+                  </span>
+                  <div className="space-y-2.5">
+                    {AddOnOptions.map((addon) => {
+                      const checked = selectedAddOns.includes(addon.id);
+                      return (
+                        <button
+                          key={addon.id}
+                          onClick={() => toggleAddOn(addon.id)}
+                          className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                            checked
+                              ? "border-[#E23744] bg-red-50/40"
+                              : "border-gray-200 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className={`w-4 h-4 rounded flex items-center justify-center border ${
+                                checked
+                                  ? "bg-[#E23744] border-[#E23744] text-white"
+                                  : "border-gray-300 bg-white"
+                              }`}
+                            >
+                              {checked && (
+                                <Check size={12} className="stroke-[3]" />
+                              )}
+                            </div>
+                            <span className="text-xs font-semibold text-gray-800">
+                              {addon.label}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-green-50 text-green-700">
+                            {addon.tag}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Zomato-style Bill Summary */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2 text-xs">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
+                    Offer Summary
+                  </span>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Shortlisted Traits</span>
+                    <span className="font-semibold text-gray-900">
+                      {cartItems.length} items
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Joining Window</span>
+                    <span className="font-semibold text-gray-900">
+                      March – June 2027
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Culture Fit & Enthusiasm Fee</span>
+                    <span className="font-bold text-green-600">FREE</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Drawer Footer Checkout Buttons */}
+              <div className="bg-white p-4 border-t border-gray-200 flex gap-2.5">
+                <button
+                  onClick={handleWhatsAppCheckout}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                >
+                  <MessageCircle size={16} />
+                  WhatsApp Shortlist
+                </button>
+                <button
+                  onClick={handleEmailCheckout}
+                  className="flex-1 bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                >
+                  <Mail size={16} />
+                  Send via Email
+                </button>
+              </div>
             </div>
           </div>
         )}
