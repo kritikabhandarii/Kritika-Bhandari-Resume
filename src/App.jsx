@@ -42,7 +42,7 @@ const ResumeData = {
       id: "exp2",
       title: "Social Media Manager Intern",
       subtitle: "Malikaka",
-      date: "Jul 2023 - Aug 2024",
+      date: "Jul 2023 - Aug 2023",
       desc: "Hand-crafted custom illustrations in Procreate and sliced up snappy short-form videos in LumaFusion",
       tag: "Must Try",
       veg: true,
