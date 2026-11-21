@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// @ts-ignor
+// @ts-ignore
 import App from "./App";
 
 const rootElement = document.getElementById("root")!;
