@@ -241,6 +241,7 @@ export default function ZomatoResume() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showBackPopup, setShowBackPopup] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -324,7 +325,13 @@ export default function ZomatoResume() {
         >
           <div className="px-4 flex items-center justify-between gap-3">
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={() => {
+                if (searchQuery) {
+                  setSearchQuery("");
+                } else {
+                  setShowBackPopup(true);
+                }
+              }}
               className={`p-2 rounded-full transition-colors ${
                 scrolled
                   ? "hover:bg-gray-100 text-gray-700"
@@ -358,15 +365,6 @@ export default function ZomatoResume() {
             )}
 
             <div className="flex items-center gap-2">
-              <button
-                className={`p-2 rounded-full transition-colors ${
-                  scrolled
-                    ? "hover:bg-gray-100 text-gray-700"
-                    : "bg-black/40 text-white backdrop-blur-sm hover:bg-black/60"
-                }`}
-              >
-                <Search size={20} />
-              </button>
               <button
                 className={`p-2 rounded-full transition-colors ${
                   scrolled
@@ -898,6 +896,35 @@ export default function ZomatoResume() {
                   Email Order
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {showBackPopup && (
+          <div
+            onClick={() => setShowBackPopup(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[1px] px-6"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border border-gray-100"
+            >
+              <div className="w-12 h-12 bg-red-50 text-[#E23744] rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                🍽️
+              </div>
+              <h3 className="font-black text-gray-900 text-base mb-1.5">
+                No other restaurants open nearby!
+              </h3>
+              <p className="text-xs text-gray-500 leading-relaxed mb-5">
+                You’ve already found the 5.0★ top-rated candidate on the menu.
+                Why browse anywhere else?
+              </p>
+              <button
+                onClick={() => setShowBackPopup(false)}
+                className="w-full bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm active:scale-95 transition-transform uppercase tracking-wide"
+              >
+                Stay & Order Here
+              </button>
             </div>
           </div>
         )}
