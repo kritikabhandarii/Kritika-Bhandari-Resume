@@ -35,7 +35,7 @@ const ResumeData = {
       logo: "/images/niswey.png",
       bonusNotes: [
         { text: "Built automated HubSpot email workflows & high-converting landing pages 🚀" },
-        { text: "Turned messy marketing ops into smooth, repeatable systems ⚙️" },
+        { text: "Planned and optimized end-to-end marketing campaigns while creating product demo videos, landing pages, and lead-gen assets. Automated email workflows in HubSpot and managed social media content to drive brand engagement." },
       ],
     },
     {
@@ -62,7 +62,7 @@ const ResumeData = {
       veg: true,
       logo: "/images/symbiosis-logo.png",
       bonusNotes: [
-        { text: "Available for a full-time Summer Internship from March to June 2027 📅" },
+        { text: "Currently in the second semester of my MBA. Available for a full-time Summer Internship from March to June 2027 📅" },
       ],
     },
     {
@@ -98,7 +98,7 @@ const ResumeData = {
       veg: true,
       logo: "/images/dav-logo.png",
       bonusNotes: [
-        { text: "92.8% Club — peak academic weapon era 📚" },
+        { text: "92.8% Club. Peak academic weapon era 📚" },
       ],
     },
   ],
@@ -113,14 +113,14 @@ const ResumeData = {
       veg: true,
       logo: "/images/hubspot.png",
       bonusNotes: [
-        { text: "HubSpot Marketing Hub Certified — zero cold leads left behind 🔥" },
+        { text: "HubSpot Marketing Hub Certified, familiar with setting up landing pages, forms and marketing workflows." },
       ],
     },
     {
       id: "sk2",
       title: "Workflow Automation",
       subtitle: "n8n",
-      date: "Intermediate",
+      date: "Beginner",
       desc: "Cooking up clean, automated systems out of messy processes. Taste-test my workflows below!.",
       veg: true,
       link: "https://docs.google.com/presentation/d/1xEL5zlJBkbxnfqdY15UpToHsGw0nE5OeCbOHefBVZ1M/edit?usp=sharing",
@@ -162,10 +162,10 @@ const ResumeData = {
       bonusNotes: [
         { text: "Can sing Doraemon in Japanese 🎶" },
         {
-          text: 'Can order a whole meal in Spanish — "¿Cuál es la especialidad de la casa?" 🌮',
+          text: 'Can order a whole meal in Spanish, "¿Cuál es la especialidad de la casa?" 🌮',
         },
         {
-          text: 'Jamming to German metal bands — "Hier kommt die Sonne" Rammstein! 🤘',
+          text: 'Jamming to German metal bands: "Hier kommt die Sonne" Rammstein! 🤘',
         },
       ],
     },
@@ -209,7 +209,7 @@ const ResumeData = {
       veg: true,
       logo: "/images/novel.png",
       bonusNotes: [
-        { text: "Always down for murder-mystery book recommendations 🔪📖" },
+        { text: "Always down for murder-mystery book recommendations, The Silent Patient and Never Lie are my all time favs " },
       ],
     },
   ],
