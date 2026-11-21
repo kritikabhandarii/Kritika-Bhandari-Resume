@@ -433,7 +433,7 @@ export default function ZomatoResume() {
 
           <div className="flex items-center gap-4 mt-6 border-b border-gray-100 pb-6">
            <a
-           href="https://www.linkedin.com/in/your-kritika-bhandari/"
+           href="https://www.linkedin.com/in/kritika-bhandari/"
            target="_blank"
            rel="noreferrer"
            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
