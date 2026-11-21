@@ -230,26 +230,4 @@ const ResumeData = {
 };
 
 const VegIcon = () => (
-  <div className="w-4 h-4 border border-green-600 flex items-center justify-center rounded-sm bg-white shrink-0">
-    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-  </div>
-);
-
-export default function ZomatoResume() {
-  const [activeTab, setActiveTab] = useState("Experience");
-  const [scrolled, setScrolled] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleCartItem = (item) => {
-    setCartItems((prev) => {
-      const exists = prev.some((i) => i.id === item.
+  <div className="w-4 h-4 border border-green-60
