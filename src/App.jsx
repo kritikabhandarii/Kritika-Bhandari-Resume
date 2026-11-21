@@ -205,6 +205,8 @@ const ResumeData = {
       logo: "/images/novel.png",
       bonusNotes: [
         { text: "Always down for murder-mystery book recommendations 🔪📖" },
+        ],
+ },
    const VegIcon = () => (
   <div className="w-4 h-4 border border-green-600 flex items-center justify-center rounded-sm bg-white shrink-0">
     <div className="w-2 h-2 bg-green-600 rounded-full"></div>
