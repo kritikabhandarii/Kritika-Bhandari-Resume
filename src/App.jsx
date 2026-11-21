@@ -155,11 +155,10 @@ const ResumeData = {
 };
 
 const FunPointers = [
-  "Can sing Doraemon in Japanese 🎶",
-  'Can order a whole meal in Spanish — "¿Cuál es la especialidad de la casa?" 🌮',
-  'Jamming to German metal bands — "Hier kommt die Sonne" Rammstein! 🤘',
-  "Elite 12 AM McDonald's on Zomato ordering instincts 🍔",
-  "Comes with 10M-view Insta reel energy (no extra charge) ✨",
+  "Can sing Doraemon in Japanese",
+  'Can order a whole meal in Spanish, "¿Cuál es la especialidad de la casa?" 🌮',
+  'Jamming to German metal bands: "Hier kommt die Sonne" Rammstein! 🤘',
+  
 ];
 
 const VegIcon = () => (
