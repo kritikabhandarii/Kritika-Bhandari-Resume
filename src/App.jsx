@@ -225,6 +225,7 @@ export default function ZomatoResume() {
   const [scrolled, setScrolled] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -389,17 +390,27 @@ export default function ZomatoResume() {
 
         <div className="relative z-10 -mt-6 bg-white rounded-t-3xl px-4 pt-6 pb-6 shadow-sm">
           <div className="mb-5">
-            <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 flex items-center gap-3">
-              <Search size={18} className="text-[#E23744]" />
+            <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
+              <Search size={18} className="text-[#E23744] shrink-0" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search 'n8n workflows' or 'CRM'..."
-                className="w-full bg-transparent outline-none text-sm placeholder:text-gray-400"
-                readOnly
+                className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
               />
-              <div className="border-l pl-3 border-gray-200">
-                <Clock size={18} className="text-[#E23744]" />
-              </div>
+              {searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-gray-400 hover:text-gray-600 p-0.5"
+                >
+                  <X size={16} />
+                </button>
+              ) : (
+                <div className="border-l pl-3 border-gray-200">
+                  <Clock size={18} className="text-[#E23744]" />
+                </div>
+              )}
             </div>
           </div>
 
@@ -499,7 +510,19 @@ export default function ZomatoResume() {
             </div>
           )}
 
-          {Object.entries(ResumeData).map(([key, items]) => {
+         {Object.entries(ResumeData).map(([key, items]) => {
+            const query = searchQuery.trim().toLowerCase();
+            const filteredItems = query
+              ? items.filter(
+                  (item) =>
+                    item.title.toLowerCase().includes(query) ||
+                    item.subtitle.toLowerCase().includes(query) ||
+                    (item.desc && item.desc.toLowerCase().includes(query)) ||
+                    (item.tag && item.tag.toLowerCase().includes(query))
+                )
+              : items;
+
+            if (filteredItems.length === 0) return null;
             const sectionTitle = key.charAt(0).toUpperCase() + key.slice(1);
             return (
               <div
@@ -510,12 +533,12 @@ export default function ZomatoResume() {
                 <h2 className="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
                   {sectionTitle}
                   <span className="text-sm font-normal text-gray-400 ml-1">
-                    ({items.length})
+                    ({filteredItems.length})
                   </span>
                 </h2>
 
                 <div className="flex flex-col">
-                  {items.map((item, index) => {
+                 {filteredItems.map((item, index) => {
                     const isAdded = cartItems.some((i) => i.id === item.id);
                     return (
                       <div
