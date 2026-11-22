@@ -553,16 +553,10 @@ export default function ZomatoResume() {
               <div className="py-4 border-b border-gray-100 flex gap-3">
                 <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  I started out in marketing, noticed how messy things got
-                  behind the scenes, and realized I really enjoy making them run
-                  smoother. As a student exploring Product Operations and
-                  Automation, I’m currently wiring up n8n workflows, tinkering
-                  with CRM setups, and turning repetitive tasks into clean,
-                  AI-powered systems with a creative twist. I’m looking for a
-                  summer internship from March to June where I can jump in, stay
-                  creative, and learn pretty much everything and anything. Let’s
-                  build something cool! (Side note: my real top skill is
-                  ordering McDonald's on Zomato at 12 AM).
+                  Hi! I’m an MBA student looking for a summer internship from March to June. I started out in marketing but found myself increasingly curious about everything happening behind the scenes, from processes and operations to technology and automation.
+I’m currently experimenting with n8n, CRM setups, AI workflows, and finding ways to make things run a little smoother. I love creativity, problem-solving, trying new things, and learning by doing.
+I’m open to exploring pretty much anything across marketing, product, tech, operations, automation, or wherever I can contribute, learn, and get my hands dirty. Always up for interesting ideas and building cool things!
+(P.S. Pizza By The Bay is my go-to restaurant recommendation. No debate.).
                 </p>
               </div>
             </>
