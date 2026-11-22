@@ -242,6 +242,8 @@ export default function ZomatoResume() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showBackPopup, setShowBackPopup] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [copiedToast, setCopiedToast] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -287,6 +289,23 @@ export default function ZomatoResume() {
   const handleWhatsAppCheckout = () => {
     const text = encodeURIComponent(buildOrderMessage());
     window.open(`https://wa.me/917900020593?text=${text}`, "_blank");
+  };
+
+  const handleShareResume = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShowMoreMenu(false);
+    setCopiedToast(true);
+    setTimeout(() => setCopiedToast(false), 2500);
+  };
+
+  const handleSurprisePick = () => {
+    const allItems = Object.values(ResumeData).flat();
+    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+    if (!cartItems.some((i) => i.id === randomItem.id)) {
+      setCartItems((prev) => [...prev, randomItem]);
+    }
+    setShowMoreMenu(false);
+    setIsCartOpen(true);
   };
 
   const categories = [
@@ -364,8 +383,9 @@ export default function ZomatoResume() {
               </div>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="relative flex items-center gap-2">
               <button
+                onClick={() => setShowMoreMenu((prev) => !prev)}
                 className={`p-2 rounded-full transition-colors ${
                   scrolled
                     ? "hover:bg-gray-100 text-gray-700"
@@ -374,6 +394,40 @@ export default function ZomatoResume() {
               >
                 <MoreVertical size={20} />
               </button>
+
+              {showMoreMenu && (
+                <div className="absolute right-0 top-11 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 text-left">
+                  <a
+                    href="/kritika_bhandari_resume.pdf"
+                    download="Kritika_Bhandari_Resume.pdf"
+                    onClick={() => setShowMoreMenu(false)}
+                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                  >
+                    <span>📄</span> Download Resume
+                  </a>
+                  <button
+                    onClick={handleShareResume}
+                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                  >
+                    <span>🔗</span> Share Menu Link
+                  </button>
+                  <button
+                    onClick={handleSurprisePick}
+                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                  >
+                    <span>🎲</span> Chef's Surprise Pick
+                  </button>
+                  <a
+                    href="https://vimeo.com/1152148247?fl=ip&fe=ec"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setShowMoreMenu(false)}
+                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                  >
+                    <span>🎬</span> Watch Video CV
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 
@@ -822,127 +876,4 @@ export default function ZomatoResume() {
                 </div>
 
                 {activePointers.length > 0 && (
-                  <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2.5">
-                      Chef's Special Notes & Bonus Lore
-                    </span>
-                    <ul className="space-y-2 text-xs text-gray-700">
-                      {activePointers.map((note, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 leading-relaxed"
-                        >
-                          <span className="text-[#E23744] font-black mt-0.5">
-                            •
-                          </span>
-                          {note.url ? (
-                            <span>
-                              {note.before}
-                              <a
-                                href={note.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-[#E23744] font-bold underline hover:text-red-700"
-                              >
-                                {note.linkText}
-                              </a>
-                              {note.after}
-                            </span>
-                          ) : (
-                            <span>{note.text}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2 text-xs">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
-                    Bill Details
-                  </span>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Selected Highlights</span>
-                    <span className="font-semibold text-gray-900">
-                      {cartItems.length} items
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Estimated Delivery</span>
-                    <span className="font-semibold text-gray-900">
-                      March – June 2027
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Good Vibes & Meme Tax</span>
-                    <span className="font-bold text-green-600">₹0 (FREE)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 border-t border-gray-200 flex gap-2.5">
-                <button
-                  onClick={handleWhatsAppCheckout}
-                  className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
-                >
-                  <MessageCircle size={16} />
-                  WhatsApp Order
-                </button>
-                <button
-                  onClick={handleEmailCheckout}
-                  className="flex-1 bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
-                >
-                  <Mail size={16} />
-                  Email Order
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showBackPopup && (
-          <div
-            onClick={() => setShowBackPopup(false)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[1px] px-6"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border border-gray-100"
-            >
-              <div className="w-12 h-12 bg-red-50 text-[#E23744] rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
-                🍽️
-              </div>
-              <h3 className="font-black text-gray-900 text-base mb-1.5">
-                No other restaurants open nearby!
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed mb-5">
-                You’ve already found the 5.0★ top-rated candidate on the menu.
-                Why browse anywhere else?
-              </p>
-              <button
-                onClick={() => setShowBackPopup(false)}
-                className="w-full bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm active:scale-95 transition-transform uppercase tracking-wide"
-              >
-                Stay & Order Here
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `,
-        }}
-      />
-    </div>
-  );
-}
+                  <div className="bg-white rounded-2xl p-4 shadow-sm border
