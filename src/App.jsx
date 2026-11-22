@@ -876,4 +876,133 @@ export default function ZomatoResume() {
                 </div>
 
                 {activePointers.length > 0 && (
-                  <div className="bg-white rounded-2xl p-4 shadow-sm border
+                  <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2.5">
+                      Chef's Special Notes & Bonus Lore
+                    </span>
+                    <ul className="space-y-2 text-xs text-gray-700">
+                      {activePointers.map((note, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 leading-relaxed"
+                        >
+                          <span className="text-[#E23744] font-black mt-0.5">
+                            •
+                          </span>
+                          {note.url ? (
+                            <span>
+                              {note.before}
+                              <a
+                                href={note.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-[#E23744] font-bold underline hover:text-red-700"
+                              >
+                                {note.linkText}
+                              </a>
+                              {note.after}
+                            </span>
+                          ) : (
+                            <span>{note.text}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2 text-xs">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
+                    Bill Details
+                  </span>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Selected Highlights</span>
+                    <span className="font-semibold text-gray-900">
+                      {cartItems.length} items
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Estimated Delivery</span>
+                    <span className="font-semibold text-gray-900">
+                      March – June 2027
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Good Vibes & Meme Tax</span>
+                    <span className="font-bold text-green-600">₹0 (FREE)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-4 border-t border-gray-200 flex gap-2.5">
+                <button
+                  onClick={handleWhatsAppCheckout}
+                  className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                >
+                  <MessageCircle size={16} />
+                  WhatsApp Order
+                </button>
+                <button
+                  onClick={handleEmailCheckout}
+                  className="flex-1 bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                >
+                  <Mail size={16} />
+                  Email Order
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {copiedToast && (
+          <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg">
+            Menu link copied! Ready to share with your team 📋
+          </div>
+        )}
+
+        {showBackPopup && (
+          <div
+            onClick={() => setShowBackPopup(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[1px] px-6"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border border-gray-100"
+            >
+              <div className="w-12 h-12 bg-red-50 text-[#E23744] rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                🍽️
+              </div>
+              <h3 className="font-black text-gray-900 text-base mb-1.5">
+                No other restaurants open nearby!
+              </h3>
+              <p className="text-xs text-gray-500 leading-relaxed mb-5">
+                You’ve already found the 5.0★ top-rated candidate on the menu.
+                Why browse anywhere else?
+              </p>
+              <button
+                onClick={() => setShowBackPopup(false)}
+                className="w-full bg-[#E23744] hover:bg-[#d32f3c] text-white font-bold text-xs py-3 rounded-xl shadow-sm active:scale-95 transition-transform uppercase tracking-wide"
+              >
+                Stay & Order Here
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `,
+        }}
+      />
+    </div>
+  );
+}
