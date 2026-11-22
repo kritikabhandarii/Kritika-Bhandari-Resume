@@ -376,7 +376,7 @@ export default function ZomatoResume() {
             <div className="relative flex items-center gap-2">
               <button
                 onClick={() => setShowMoreMenu((prev) => !prev)}
-                className={`p-2 rounded-full transition-colors ${
+                className={`relative z-50 p-2 rounded-full transition-colors ${
                   scrolled
                     ? "hover:bg-gray-100 text-gray-700"
                     : "bg-black/40 text-white backdrop-blur-sm hover:bg-black/60"
@@ -386,22 +386,28 @@ export default function ZomatoResume() {
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-11 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 text-left">
-                  <a
-                    href="/kritika_bhandari_resume.pdf"
-                    download="Kritika_Bhandari_Resume.pdf"
+                <>
+                  <div
                     onClick={() => setShowMoreMenu(false)}
-                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
-                  >
-                    <span>📄</span> Download Resume
-                  </a>
-                  <button
-                    onClick={handleShareResume}
-                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
-                  >
-                    <span>🔗</span> Share Menu Link
-                  </button>
-                </div>
+                    className="fixed inset-0 z-40"
+                  />
+                  <div className="absolute right-0 top-11 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 text-left">
+                    <a
+                      href="/kritika_bhandari_resume.pdf"
+                      download="Kritika_Bhandari_Resume.pdf"
+                      onClick={() => setShowMoreMenu(false)}
+                      className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                    >
+                      <span>📄</span> Download Resume
+                    </a>
+                    <button
+                      onClick={handleShareResume}
+                      className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
+                    >
+                      <span>🔗</span> Share Menu Link
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -510,7 +516,7 @@ export default function ZomatoResume() {
 
               <div className="flex items-center gap-4 mt-6 border-b border-gray-100 pb-6">
                 <a
-                  href="https://www.linkedin.com/in/your-linkedin-username/"
+                  href="https://www.linkedin.com/in/kritika-bhandari/"
                   target="_blank"
                   rel="noreferrer"
                   className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
