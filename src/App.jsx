@@ -34,10 +34,13 @@ const ResumeData = {
       logo: "/images/niswey.png",
       bonusNotes: [
         {
-          text: "Built automated HubSpot email workflows & high-converting landing pages 🚀",
+          text: "Planned, executed, and optimized end-to-end performance marketing campaigns.",
         },
         {
-          text: "Turned messy marketing ops into smooth, repeatable systems ⚙️",
+          text: "Produced product demo videos, landing pages, forms, and email assets to drive lead generation.",
+        },
+        {
+          text: "Automated HubSpot email workflows and managed social media content to boost engagement.",
         },
       ],
     },
@@ -223,7 +226,7 @@ const ResumeData = {
       veg: true,
       logo: "/images/novel.png",
       bonusNotes: [
-        { text: "Always down for murder-mystery book recommendations 🔪📖" },
+        { text: "Always down for murder-mystery book recommendations, The Silent Patient and Never Lie are my all time favs!" },
       ],
     },
   ],
