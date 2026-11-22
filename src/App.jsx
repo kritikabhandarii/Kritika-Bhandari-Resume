@@ -292,20 +292,10 @@ export default function ZomatoResume() {
   };
 
   const handleShareResume = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText("https://kritika-bhandari-resume.vercel.app/");
     setShowMoreMenu(false);
     setCopiedToast(true);
     setTimeout(() => setCopiedToast(false), 2500);
-  };
-
-  const handleSurprisePick = () => {
-    const allItems = Object.values(ResumeData).flat();
-    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
-    if (!cartItems.some((i) => i.id === randomItem.id)) {
-      setCartItems((prev) => [...prev, randomItem]);
-    }
-    setShowMoreMenu(false);
-    setIsCartOpen(true);
   };
 
   const categories = [
@@ -396,7 +386,7 @@ export default function ZomatoResume() {
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-11 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 text-left">
+                <div className="absolute right-0 top-11 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 text-left">
                   <a
                     href="/kritika_bhandari_resume.pdf"
                     download="Kritika_Bhandari_Resume.pdf"
@@ -411,21 +401,6 @@ export default function ZomatoResume() {
                   >
                     <span>🔗</span> Share Menu Link
                   </button>
-                  <button
-                    onClick={handleSurprisePick}
-                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
-                  >
-                    <span>🎲</span> Chef's Surprise Pick
-                  </button>
-                  <a
-                    href="https://vimeo.com/1152148247?fl=ip&fe=ec"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setShowMoreMenu(false)}
-                    className="w-full px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-[#E23744] flex items-center gap-2.5 transition-colors"
-                  >
-                    <span>🎬</span> Watch Video CV
-                  </a>
                 </div>
               )}
             </div>
