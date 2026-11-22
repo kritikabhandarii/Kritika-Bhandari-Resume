@@ -128,7 +128,7 @@ const ResumeData = {
       logo: "/images/hubspot.png",
       bonusNotes: [
         {
-          text: "HubSpot Marketing Hub Certified — zero cold leads left behind 🔥",
+          text: "HubSpot Marketing Hub Certified. Familiar with setting up landing pages, marketing workflows, email sequences, and WhatsApp marketing",
         },
       ],
     },
