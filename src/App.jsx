@@ -334,7 +334,7 @@ export default function ZomatoResume() {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = window.innerWidth >= 1024 ? 95 : 135;
+      const offset = window.innerWidth >= 1024 ? 105 : 135;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -509,9 +509,9 @@ export default function ZomatoResume() {
         {/* Main Content Area */}
         <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-none">
           <div className="max-w-3xl lg:max-w-7xl mx-auto lg:flex lg:items-start lg:gap-10 lg:px-8 lg:pb-8">
-            {/* LEFT COLUMN (Profile Info & Bio - No overflow-y-auto so avatar never clips!) */}
+            {/* LEFT COLUMN (lg:top-36 ensures -mt-16 avatar stays completely clear below the sticky navbar when scrolled) */}
             <div
-              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
+              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-36 ${
                 trimmedQuery ? "pb-3" : "pb-6"
               }`}
             >
@@ -724,7 +724,7 @@ export default function ZomatoResume() {
                   <div
                     key={key}
                     id={key}
-                    className="bg-white mb-3 lg:mb-6 pt-6 pb-2 lg:pb-6 px-4 sm:px-6 lg:p-6 shadow-sm lg:border lg:border-gray-100 lg:rounded-2xl scroll-mt-24"
+                    className="bg-white mb-3 lg:mb-6 pt-6 pb-2 lg:pb-6 px-4 sm:px-6 lg:p-6 shadow-sm lg:border lg:border-gray-100 lg:rounded-2xl scroll-mt-28"
                   >
                     <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
                       {sectionTitle}
