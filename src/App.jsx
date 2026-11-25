@@ -342,13 +342,15 @@ export default function ZomatoResume() {
   const trimmedQuery = searchQuery.trim().toLowerCase();
 
   return (
-    <div className="min-h-dvh bg-gray-100 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24 lg:py-6 lg:px-6">
-      {/* Responsive Container: Mobile -> Tablet -> Desktop */}
-      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-dvh lg:min-h-0 lg:rounded-3xl shadow-xl relative overflow-x-clip">
+    <div className="min-h-dvh bg-gray-100 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24 lg:py-8 lg:px-6">
+      {/* Main Card Container: Clean 4-corner rounding on desktop without breaking sticky children */}
+      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-dvh lg:min-h-0 lg:rounded-3xl shadow-xl relative">
         {/* Sticky Top Navbar */}
         <div
           className={`sticky top-0 z-50 transition-all duration-300 ${
-            scrolled ? "bg-white shadow-md py-3" : "bg-transparent pt-4 pb-2"
+            scrolled
+              ? "bg-white shadow-md py-3 lg:rounded-t-3xl"
+              : "bg-transparent pt-4 pb-2"
           }`}
         >
           <div className="px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-3">
@@ -458,22 +460,32 @@ export default function ZomatoResume() {
           )}
         </div>
 
-        {/* Hero Banner (Adjusted focal point so face stays centered on wide screens) */}
+        {/* Hero Banner: Full-bleed on mobile, blurred backdrop + uncropped portrait on tablet/desktop */}
         <div
           className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 lg:rounded-t-3xl overflow-hidden ${
             trimmedQuery ? "h-28" : "h-64 md:h-72 lg:h-80"
           }`}
         >
+          {/* Blurred ambient background for wide screens */}
+          <img
+            src="/images/kritika.png"
+            alt=""
+            aria-hidden="true"
+            className="hidden md:block absolute inset-0 w-full h-full object-cover object-[center_30%] scale-110 blur-xl brightness-50"
+          />
+
+          {/* Main Photo: Fills width on mobile; fits cleanly without cropping your face/smile on desktop */}
           <img
             src="/images/kritika.png"
             alt="Kritika Bhandari"
-            className="w-full h-full object-cover object-[center_22%]"
+            className="relative z-10 w-full h-full object-cover object-[center_35%] md:object-contain"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/15 to-black/30" />
+
+          <div className="absolute inset-0 z-20 bg-gradient-to-b from-black/50 via-transparent to-black/25 pointer-events-none" />
         </div>
 
         {/* Main Content Area: Single column on mobile/tablet, 2-column split on desktop (lg:) */}
-        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pt-8">
+        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-b-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pt-8">
           {/* LEFT COLUMN (Profile Info & Bio - Sticky on Desktop) */}
           <div
             className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
