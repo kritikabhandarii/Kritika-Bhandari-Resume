@@ -343,7 +343,7 @@ export default function ZomatoResume() {
 
   return (
     <div className="min-h-dvh bg-gray-100 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24 lg:py-8 lg:px-6">
-      {/* Main Card Container: Clean 4-corner rounding on desktop without breaking sticky children */}
+      {/* Main Card Container */}
       <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-dvh lg:min-h-0 lg:rounded-3xl shadow-xl relative">
         {/* Sticky Top Navbar */}
         <div
@@ -460,38 +460,51 @@ export default function ZomatoResume() {
           )}
         </div>
 
-        {/* Hero Banner: Full-bleed on mobile, blurred backdrop + uncropped portrait on tablet/desktop */}
+        {/* Hero Cover Banner: Lush ambient greenery banner on wide screens, direct full-bleed on mobile */}
         <div
           className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 lg:rounded-t-3xl overflow-hidden ${
-            trimmedQuery ? "h-28" : "h-64 md:h-72 lg:h-80"
+            trimmedQuery ? "h-28" : "h-56 md:h-64 lg:h-72"
           }`}
         >
-          {/* Blurred ambient background for wide screens */}
+          {/* Ambient greenery backdrop (blurred & zoomed into the trees/foliage on tablet/desktop) */}
           <img
             src="/images/kritika.png"
             alt=""
             aria-hidden="true"
-            className="hidden md:block absolute inset-0 w-full h-full object-cover object-[center_30%] scale-110 blur-xl brightness-50"
+            className="hidden md:block w-full h-full object-cover object-[center_15%] scale-150 blur-md brightness-75"
           />
 
-          {/* Main Photo: Fills width on mobile; fits cleanly without cropping your face/smile on desktop */}
+          {/* Mobile keeps the direct full-bleed photo */}
           <img
             src="/images/kritika.png"
             alt="Kritika Bhandari"
-            className="relative z-10 w-full h-full object-cover object-[center_35%] md:object-contain"
+            className="md:hidden w-full h-full object-cover object-[center_35%]"
           />
 
-          <div className="absolute inset-0 z-20 bg-gradient-to-b from-black/50 via-transparent to-black/25 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/15 to-black/40 pointer-events-none" />
         </div>
 
-        {/* Main Content Area: Single column on mobile/tablet, 2-column split on desktop (lg:) */}
-        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-b-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pt-8">
+        {/* Main Content Area: Clean white background, zero grey corner gaps */}
+        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-b-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pb-8">
           {/* LEFT COLUMN (Profile Info & Bio - Sticky on Desktop) */}
           <div
             className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
               trimmedQuery ? "pb-3" : "pb-6"
             }`}
           >
+            {/* Desktop Overlapping Portrait Avatar (Uncropped, crisp & prominent) */}
+            {!trimmedQuery && (
+              <div className="hidden md:block -mt-20 lg:-mt-24 mb-4">
+                <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-gray-100">
+                  <img
+                    src="/images/kritika.png"
+                    alt="Kritika Bhandari"
+                    className="w-full h-full object-cover object-[center_28%]"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Mobile/Tablet Search Input */}
             <div className={`lg:hidden ${trimmedQuery ? "mb-1" : "mb-5"}`}>
               <div className="bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
@@ -613,7 +626,7 @@ export default function ZomatoResume() {
           </div>
 
           {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu List) */}
-          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-0 pb-28 lg:pb-12">
+          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-8 pb-28 lg:pb-4">
             {/* Desktop Search Bar */}
             <div className="hidden lg:block mb-5">
               <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors shadow-sm">
@@ -843,7 +856,7 @@ export default function ZomatoResume() {
               )}
 
             {/* Footer */}
-            <div className="py-8 flex flex-col items-center justify-center text-gray-400">
+            <div className="py-8 lg:pb-2 flex flex-col items-center justify-center text-gray-400">
               <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
                 zomato style
               </div>
