@@ -226,7 +226,9 @@ const ResumeData = {
       veg: true,
       logo: "/images/novel.png",
       bonusNotes: [
-        { text: "Always down for murder-mystery book recommendations, The Silent Patient and Never Lie are my all time favs!" },
+        {
+          text: "Always down for murder-mystery book recommendations, The Silent Patient and Never Lie are my all time favs!",
+        },
       ],
     },
   ],
@@ -328,14 +330,16 @@ export default function ZomatoResume() {
   const trimmedQuery = searchQuery.trim().toLowerCase();
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24">
-      <div className="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-gray-100/80 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24">
+      {/* Responsive Container: Mobile -> Tablet -> Desktop */}
+      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-screen shadow-2xl relative overflow-x-clip">
+        {/* Sticky Top Navbar */}
         <div
           className={`sticky top-0 z-50 transition-all duration-300 ${
             scrolled ? "bg-white shadow-md py-3" : "bg-transparent pt-4 pb-2"
           }`}
         >
-          <div className="px-4 flex items-center justify-between gap-3">
+          <div className="px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-3">
             <button
               onClick={() => {
                 if (searchQuery) {
@@ -344,39 +348,42 @@ export default function ZomatoResume() {
                   setShowBackPopup(true);
                 }
               }}
-              className={`p-2 rounded-full transition-colors ${
+              className={`p-2 rounded-full transition-colors shrink-0 ${
                 scrolled
                   ? "hover:bg-gray-100 text-gray-700"
                   : "bg-black/40 text-white backdrop-blur-sm hover:bg-black/60"
               }`}
             >
-              <ArrowLeft size={22} />
+              <ArrowLeft size={20} className="sm:w-[22px] sm:h-[22px]" />
             </button>
 
             <div
-              className={`flex-1 transition-all duration-300 ${
+              className={`flex-1 min-w-0 transition-all duration-300 ${
                 scrolled ? "opacity-100" : "opacity-0 hidden"
               }`}
             >
-              <h1 className="font-bold text-lg truncate text-gray-900">
+              <h1 className="font-bold text-base sm:text-lg truncate text-gray-900">
                 Kritika Bhandari
               </h1>
             </div>
 
             {!scrolled && (
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="flex items-center gap-1 text-xs font-bold text-white drop-shadow-md">
-                  <MapPin size={14} className="text-[#E23744] fill-white" />
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-white drop-shadow-md">
+                  <MapPin
+                    size={14}
+                    className="text-[#E23744] fill-white shrink-0"
+                  />
                   <span>Home</span>
-                  <ChevronRight size={14} />
+                  <ChevronRight size={14} className="shrink-0" />
                 </div>
-                <span className="text-[11px] text-gray-100 truncate drop-shadow-md">
+                <span className="text-[11px] sm:text-xs text-gray-100 truncate drop-shadow-md">
                   Thane, Maharashtra, India
                 </span>
               </div>
             )}
 
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center gap-2 shrink-0">
               <button
                 onClick={() => setShowMoreMenu((prev) => !prev)}
                 className={`relative z-50 p-2 rounded-full transition-colors ${
@@ -415,9 +422,10 @@ export default function ZomatoResume() {
             </div>
           </div>
 
+          {/* Scrolled Category Tabs */}
           {!trimmedQuery && (
             <div
-              className={`px-4 mt-3 flex overflow-x-auto hide-scrollbar gap-4 transition-all duration-300 ${
+              className={`px-3 sm:px-6 mt-3 flex overflow-x-auto hide-scrollbar gap-4 sm:gap-6 transition-all duration-300 ${
                 scrolled ? "block border-t border-gray-100 pt-3" : "hidden"
               }`}
             >
@@ -438,9 +446,10 @@ export default function ZomatoResume() {
           )}
         </div>
 
+        {/* Hero Banner */}
         <div
           className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 ${
-            trimmedQuery ? "h-28" : "h-64"
+            trimmedQuery ? "h-28" : "h-64 md:h-80 lg:h-96"
           }`}
         >
           <img
@@ -448,346 +457,407 @@ export default function ZomatoResume() {
             alt="Kritika Bhandari"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/15 to-black/30" />
         </div>
 
-        <div
-          className={`relative z-10 -mt-6 bg-white rounded-t-3xl px-4 pt-6 shadow-sm ${
-            trimmedQuery ? "pb-3" : "pb-6"
-          }`}
-        >
-          <div className={trimmedQuery ? "mb-1" : "mb-5"}>
-            <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
-              <Search size={18} className="text-[#E23744] shrink-0" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search 'n8n workflows' or 'CRM'..."
-                className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
-              />
-              {searchQuery ? (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="text-gray-400 hover:text-gray-600 p-0.5"
-                >
-                  <X size={16} />
-                </button>
-              ) : (
-                <a
-                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
-                  target="_blank"
-                  rel="noreferrer"
-                  title="Schedule a quick chat on Google Calendar"
-                  className="border-l pl-3 border-gray-200 hover:opacity-75 transition-opacity flex items-center"
-                >
-                  <Clock size={18} className="text-[#E23744]" />
-                </a>
-              )}
+        {/* Main Content Area: Single column on mobile/tablet, 2-column split on desktop (lg:) */}
+        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:flex lg:items-start lg:gap-8 lg:px-6 lg:pt-8">
+          {/* LEFT COLUMN (Profile Info & Bio - Sticky on Desktop) */}
+          <div
+            className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[360px] xl:w-[400px] lg:shrink-0 lg:sticky lg:top-28 ${
+              trimmedQuery ? "pb-3" : "pb-6"
+            }`}
+          >
+            {/* Search Input (Visible on Mobile/Tablet here; shown on Right Column on Desktop) */}
+            <div className={`lg:hidden ${trimmedQuery ? "mb-1" : "mb-5"}`}>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
+                <Search size={18} className="text-[#E23744] shrink-0" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search 'n8n workflows' or 'CRM'..."
+                  className="w-full min-w-0 bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
+                />
+                {searchQuery ? (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="text-gray-400 hover:text-gray-600 p-0.5 shrink-0"
+                  >
+                    <X size={16} />
+                  </button>
+                ) : (
+                  <a
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Schedule a quick chat on Google Calendar"
+                    className="border-l pl-2.5 border-gray-200 hover:opacity-75 transition-opacity flex items-center shrink-0"
+                  >
+                    <Clock size={18} className="text-[#E23744]" />
+                  </a>
+                )}
+              </div>
             </div>
+
+            {(!trimmedQuery || true) && (
+              <div className={trimmedQuery ? "hidden lg:block" : "block"}>
+                <div className="flex justify-between items-start gap-3">
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 leading-tight">
+                      KRITIKA BHANDARI
+                    </h1>
+                    <p className="text-gray-500 text-xs sm:text-sm mt-1.5 mb-3">
+                      Aspiring Product Operations | CRM Implementation | AI
+                      Automation Enthusiast
+                    </p>
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 bg-gray-100 w-fit px-2.5 py-1 rounded-md">
+                      <Clock size={12} className="shrink-0" />
+                      <span>Available to Join (March–June 2027)</span>
+                      <span className="text-gray-300">|</span>
+                      <span>Thane, MH</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2.5 py-1.5 shadow-md shrink-0">
+                    <div className="flex items-center gap-1 font-bold text-sm">
+                      <span>5.0</span>
+                      <Star size={12} className="fill-white" />
+                    </div>
+                    <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
+                      Top Rated
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Action Buttons */}
+                <div className="flex items-center gap-2.5 sm:gap-3 mt-6 border-b border-gray-100 pb-6 md:max-w-md lg:max-w-none">
+                  <a
+                    href="https://www.linkedin.com/in/kritika-bhandari/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <Briefcase size={18} className="text-[#0A66C2]" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      LinkedIn
+                    </span>
+                  </a>
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <Mail size={18} className="text-gray-700" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      Email
+                    </span>
+                  </a>
+                  <a
+                    href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <MessageCircle size={18} className="text-green-600" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      WhatsApp
+                    </span>
+                  </a>
+                </div>
+
+                {/* Bio */}
+                <div className="py-4 border-b border-gray-100 lg:border-none flex gap-3">
+                  <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                    Hi! I’m an MBA student looking for a summer internship from
+                    March to June. I started out in marketing but found myself
+                    increasingly curious about everything happening behind the
+                    scenes, from processes and operations to technology and
+                    automation. I’m currently experimenting with n8n, CRM
+                    setups, AI workflows, and finding ways to make things run a
+                    little smoother. I love creativity, problem-solving, trying
+                    new things, and learning by doing. I’m open to exploring
+                    pretty much anything across marketing, product, tech,
+                    operations, automation, or wherever I can contribute, learn,
+                    and get my hands dirty. Always up for interesting ideas and
+                    building cool things! (P.S. Pizza By The Bay is my go-to
+                    restaurant recommendation. No debate.)
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
-          {!trimmedQuery && (
-            <>
-              <div className="flex justify-between items-start gap-4">
-                <div>
-                  <h1 className="text-2xl font-black text-gray-900 leading-tight">
-                    KRITIKA BHANDARI
-                  </h1>
-                  <p className="text-gray-500 text-sm mt-1 mb-2 line-clamp-2">
-                    Aspiring Product Operations | CRM Implementation | AI
-                    Automation Enthusiast
-                  </p>
-                  <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-100 w-fit px-2 py-1 rounded-md">
-                    <Clock size={12} />
-                    <span>Available to Join (March-June 2027)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>Thane, MH</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2 py-1.5 shadow-md shrink-0">
-                  <div className="flex items-center gap-1 font-bold text-sm">
-                    <span>5.0</span>
-                    <Star size={12} className="fill-white" />
-                  </div>
-                  <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
-                    Top Rated
-                  </div>
-                </div>
+          {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu Grid) */}
+          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-0 pb-32">
+            {/* Desktop Search Bar */}
+            <div className="hidden lg:block mb-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors shadow-sm">
+                <Search size={18} className="text-[#E23744] shrink-0" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search 'n8n workflows', 'CRM', 'MBA', or 'Procreate'..."
+                  className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
+                />
+                {searchQuery ? (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="text-gray-400 hover:text-gray-600 p-0.5"
+                  >
+                    <X size={16} />
+                  </button>
+                ) : (
+                  <a
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Schedule a quick chat on Google Calendar"
+                    className="border-l pl-3 border-gray-200 hover:opacity-75 transition-opacity flex items-center gap-1.5 text-xs font-semibold text-[#E23744] shrink-0"
+                  >
+                    <Clock size={16} />
+                    <span>Book Chat</span>
+                  </a>
+                )}
               </div>
-
-              <div className="flex items-center gap-4 mt-6 border-b border-gray-100 pb-6">
-                <a
-                  href="https://www.linkedin.com/in/kritika-bhandari/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <Briefcase size={18} className="text-[#0A66C2]" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    LinkedIn
-                  </span>
-                </a>
-                <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <Mail size={18} className="text-gray-700" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    Email
-                  </span>
-                </a>
-                <a
-                  href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <MessageCircle size={18} className="text-green-600" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    WhatsApp
-                  </span>
-                </a>
-              </div>
-
-              <div className="py-4 border-b border-gray-100 flex gap-3">
-                <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  Hi! I’m an MBA student looking for a summer internship from March to June. I started out in marketing but found myself increasingly curious about everything happening behind the scenes, from processes and operations to technology and automation.
-I’m currently experimenting with n8n, CRM setups, AI workflows, and finding ways to make things run a little smoother. I love creativity, problem-solving, trying new things, and learning by doing.
-I’m open to exploring pretty much anything across marketing, product, tech, operations, automation, or wherever I can contribute, learn, and get my hands dirty. Always up for interesting ideas and building cool things!
-(P.S. Pizza By The Bay is my go-to restaurant recommendation. No debate.).
-                </p>
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="bg-gray-100/50 pt-2 pb-32">
-          {!scrolled && !trimmedQuery && (
-            <div className="px-4 py-4 flex overflow-x-auto hide-scrollbar gap-3 bg-white mb-2 shadow-sm sticky top-[72px] z-40">
-              {categories.map((cat) => (
-                <button
-                  key={`inline-${cat.id}`}
-                  onClick={() => scrollToSection(cat.id)}
-                  className={`whitespace-nowrap px-4 py-1.5 rounded-xl border text-sm font-semibold transition-all flex items-center gap-2 ${
-                    activeTab === cat.name
-                      ? "bg-red-50 border-[#E23744] text-[#E23744]"
-                      : "bg-white border-gray-200 text-gray-600 shadow-sm"
-                  }`}
-                >
-                  <cat.icon size={16} />
-                  {cat.name}
-                </button>
-              ))}
             </div>
-          )}
 
-          {Object.entries(ResumeData).map(([key, items]) => {
-            const filteredItems = trimmedQuery
-              ? items.filter(
-                  (item) =>
-                    item.title.toLowerCase().includes(trimmedQuery) ||
-                    item.subtitle.toLowerCase().includes(trimmedQuery) ||
-                    (item.desc &&
-                      item.desc.toLowerCase().includes(trimmedQuery)) ||
-                    (item.tag && item.tag.toLowerCase().includes(trimmedQuery))
-                )
-              : items;
-
-            if (filteredItems.length === 0) return null;
-            const sectionTitle = key.charAt(0).toUpperCase() + key.slice(1);
-
-            return (
-              <div
-                key={key}
-                id={key}
-                className="bg-white mb-3 pt-6 pb-2 px-4 shadow-sm scroll-mt-36"
-              >
-                <h2 className="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
-                  {sectionTitle}
-                  <span className="text-sm font-normal text-gray-400 ml-1">
-                    ({filteredItems.length})
-                  </span>
-                </h2>
-
-                <div className="flex flex-col">
-                  {filteredItems.map((item, index) => {
-                    const isAdded = cartItems.some((i) => i.id === item.id);
-                    return (
-                      <div
-                        key={item.id}
-                        className={`py-6 flex gap-4 ${
-                          index !== filteredItems.length - 1
-                            ? "border-b border-dashed border-gray-200"
-                            : ""
-                        }`}
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <VegIcon />
-                            {item.tag && (
-                              <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
-                                <Star size={8} className="fill-[#E23744]" />
-                                {item.tag}
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="font-bold text-gray-800 text-[15px] leading-tight mb-1">
-                            {item.title}
-                          </h3>
-                          <div className="text-sm font-medium text-gray-700 mb-1">
-                            {item.subtitle}
-                          </div>
-
-                          {item.date && (
-                            <div className="text-xs font-semibold text-gray-500 mb-2">
-                              {item.date}
-                            </div>
-                          )}
-
-                          {item.desc && (
-                            <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
-                              {item.desc}
-                            </p>
-                          )}
-
-                          {item.link && (
-                            <a
-                              href={item.link}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-block mt-2 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2 py-1 rounded-md hover:bg-red-50"
-                            >
-                              View Workflow →
-                            </a>
-                          )}
-                        </div>
-
-                        <div className="w-[110px] shrink-0 flex flex-col items-center">
-                          <div className="w-[110px] h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
-                            {item.logo ? (
-                              <img
-                                src={item.logo}
-                                alt={item.subtitle}
-                                className="w-full h-full object-contain p-2 bg-white"
-                              />
-                            ) : (
-                              <>
-                                {key === "experience" && (
-                                  <Briefcase
-                                    size={32}
-                                    className="text-red-200"
-                                  />
-                                )}
-                                {key === "education" && (
-                                  <GraduationCap
-                                    size={32}
-                                    className="text-red-200"
-                                  />
-                                )}
-                                {key === "skills" && (
-                                  <Sparkles
-                                    size={32}
-                                    className="text-red-200"
-                                  />
-                                )}
-                                {key === "interests" && (
-                                  <Heart size={32} className="text-red-200" />
-                                )}
-                              </>
-                            )}
-
-                            <button
-                              onClick={() => toggleCartItem(item)}
-                              className={`absolute -bottom-0 left-1/2 -translate-x-1/2 w-[85%] font-black text-xs py-1.5 rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-1 uppercase tracking-wide ${
-                                isAdded
-                                  ? "bg-[#E23744] text-white border border-[#E23744]"
-                                  : "bg-white text-[#E23744] border border-red-200 hover:bg-red-50"
-                              }`}
-                            >
-                              {isAdded ? (
-                                <>
-                                  Added <Check size={14} className="stroke-[3]" />
-                                </>
-                              ) : (
-                                <>
-                                  Add <Plus size={14} className="stroke-[3]" />
-                                </>
-                              )}
-                            </button>
-                          </div>
-                          <div className="text-[10px] text-gray-400 mt-2 text-center">
-                            {isAdded ? "in your plate" : "customizable"}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-
-          {trimmedQuery &&
-            Object.values(ResumeData).every(
-              (items) =>
-                !items.some(
-                  (item) =>
-                    item.title.toLowerCase().includes(trimmedQuery) ||
-                    item.subtitle.toLowerCase().includes(trimmedQuery) ||
-                    (item.desc &&
-                      item.desc.toLowerCase().includes(trimmedQuery)) ||
-                    (item.tag && item.tag.toLowerCase().includes(trimmedQuery))
-                )
-            ) && (
-              <div className="bg-white py-12 px-4 text-center">
-                <p className="text-sm font-bold text-gray-700">
-                  No dishes found for "{searchQuery}"
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  Try searching "HubSpot", "n8n", "Procreate", or "MBA"
-                </p>
+            {/* Inline Category Filter Chips */}
+            {!scrolled && !trimmedQuery && (
+              <div className="px-4 sm:px-6 lg:px-0 py-3.5 flex overflow-x-auto hide-scrollbar gap-2.5 sm:gap-3 bg-white lg:bg-transparent mb-2 shadow-sm lg:shadow-none sticky top-[68px] lg:static z-40">
+                {categories.map((cat) => (
+                  <button
+                    key={`inline-${cat.id}`}
+                    onClick={() => scrollToSection(cat.id)}
+                    className={`whitespace-nowrap px-3.5 sm:px-4 py-1.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === cat.name
+                        ? "bg-red-50 border-[#E23744] text-[#E23744]"
+                        : "bg-white border-gray-200 text-gray-600 shadow-sm hover:border-gray-300"
+                    }`}
+                  >
+                    <cat.icon size={15} />
+                    {cat.name}
+                  </button>
+                ))}
               </div>
             )}
 
-          <div className="py-8 flex flex-col items-center justify-center text-gray-400">
-            <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
-              zomato style
+            {/* Menu Sections */}
+            {Object.entries(ResumeData).map(([key, items]) => {
+              const filteredItems = trimmedQuery
+                ? items.filter(
+                    (item) =>
+                      item.title.toLowerCase().includes(trimmedQuery) ||
+                      item.subtitle.toLowerCase().includes(trimmedQuery) ||
+                      (item.desc &&
+                        item.desc.toLowerCase().includes(trimmedQuery)) ||
+                      (item.tag &&
+                        item.tag.toLowerCase().includes(trimmedQuery))
+                  )
+                : items;
+
+              if (filteredItems.length === 0) return null;
+              const sectionTitle = key.charAt(0).toUpperCase() + key.slice(1);
+
+              return (
+                <div
+                  key={key}
+                  id={key}
+                  className="bg-white mb-3 lg:mb-6 pt-6 pb-2 lg:pb-6 px-4 sm:px-6 lg:p-6 shadow-sm lg:border lg:border-gray-100 lg:rounded-2xl scroll-mt-36"
+                >
+                  <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
+                    {sectionTitle}
+                    <span className="text-sm font-normal text-gray-400 ml-1">
+                      ({filteredItems.length})
+                    </span>
+                  </h2>
+
+                  {/* 1 column on Mobile, 2 columns on Tablet/Desktop */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+                    {filteredItems.map((item, index) => {
+                      const isAdded = cartItems.some((i) => i.id === item.id);
+                      return (
+                        <div
+                          key={item.id}
+                          className={`py-5 md:p-4 flex gap-3 sm:gap-4 md:border md:border-gray-100 md:rounded-2xl md:hover:shadow-md md:transition-shadow bg-white ${
+                            index !== filteredItems.length - 1
+                              ? "border-b border-dashed border-gray-200 md:border-solid"
+                              : ""
+                          }`}
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <VegIcon />
+                              {item.tag && (
+                                <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                  <Star size={8} className="fill-[#E23744]" />
+                                  {item.tag}
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="font-bold text-gray-800 text-[15px] leading-tight mb-1">
+                              {item.title}
+                            </h3>
+                            <div className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                              {item.subtitle}
+                            </div>
+
+                            {item.date && (
+                              <div className="text-xs font-semibold text-gray-500 mb-2">
+                                {item.date}
+                              </div>
+                            )}
+
+                            {item.desc && (
+                              <p className="text-xs text-gray-500 leading-relaxed line-clamp-3 md:line-clamp-4">
+                                {item.desc}
+                              </p>
+                            )}
+
+                            {item.link && (
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-block mt-2.5 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2.5 py-1 rounded-md hover:bg-red-50 transition-colors"
+                              >
+                                View Workflow →
+                              </a>
+                            )}
+                          </div>
+
+                          {/* Item Thumbnail & Add Button (Responsive width for small phones) */}
+                          <div className="w-24 sm:w-[110px] shrink-0 flex flex-col items-center">
+                            <div className="w-24 h-24 sm:w-[110px] sm:h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
+                              {item.logo ? (
+                                <img
+                                  src={item.logo}
+                                  alt={item.subtitle}
+                                  className="w-full h-full object-contain p-2 bg-white"
+                                />
+                              ) : (
+                                <>
+                                  {key === "experience" && (
+                                    <Briefcase
+                                      size={30}
+                                      className="text-red-200"
+                                    />
+                                  )}
+                                  {key === "education" && (
+                                    <GraduationCap
+                                      size={30}
+                                      className="text-red-200"
+                                    />
+                                  )}
+                                  {key === "skills" && (
+                                    <Sparkles
+                                      size={30}
+                                      className="text-red-200"
+                                    />
+                                  )}
+                                  {key === "interests" && (
+                                    <Heart size={30} className="text-red-200" />
+                                  )}
+                                </>
+                              )}
+
+                              <button
+                                onClick={() => toggleCartItem(item)}
+                                className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[88%] font-black text-[11px] sm:text-xs py-1 sm:py-1.5 rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-1 uppercase tracking-wide ${
+                                  isAdded
+                                    ? "bg-[#E23744] text-white border border-[#E23744]"
+                                    : "bg-white text-[#E23744] border border-red-200 hover:bg-red-50"
+                                }`}
+                              >
+                                {isAdded ? (
+                                  <>
+                                    Added{" "}
+                                    <Check size={13} className="stroke-[3]" />
+                                  </>
+                                ) : (
+                                  <>
+                                    Add <Plus size={13} className="stroke-[3]" />
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                            <div className="text-[10px] text-gray-400 mt-1.5 text-center">
+                              {isAdded ? "in your plate" : "customizable"}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Empty Search State */}
+            {trimmedQuery &&
+              Object.values(ResumeData).every(
+                (items) =>
+                  !items.some(
+                    (item) =>
+                      item.title.toLowerCase().includes(trimmedQuery) ||
+                      item.subtitle.toLowerCase().includes(trimmedQuery) ||
+                      (item.desc &&
+                        item.desc.toLowerCase().includes(trimmedQuery)) ||
+                      (item.tag &&
+                        item.tag.toLowerCase().includes(trimmedQuery))
+                  )
+              ) && (
+                <div className="bg-white py-12 px-4 text-center rounded-2xl border border-gray-100">
+                  <p className="text-sm font-bold text-gray-700">
+                    No dishes found for "{searchQuery}"
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Try searching "HubSpot", "n8n", "Procreate", or "MBA"
+                  </p>
+                </div>
+              )}
+
+            {/* Footer */}
+            <div className="py-8 flex flex-col items-center justify-center text-gray-400">
+              <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
+                zomato style
+              </div>
+              <p className="text-xs">End of Resume</p>
             </div>
-            <p className="text-xs">End of Resume</p>
           </div>
         </div>
 
+        {/* Sticky Floating Cart Bar */}
         {cartItems.length > 0 && !isCartOpen && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] z-40">
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] md:max-w-xl z-40">
             <button
               onClick={() => setIsCartOpen(true)}
               className="w-full bg-[#E23744] hover:bg-[#d32f3c] rounded-xl shadow-2xl p-3.5 flex items-center justify-between text-white active:scale-[0.99] transition-all text-left"
             >
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0 pr-2">
                 <span className="font-bold text-sm flex items-center gap-1.5">
-                  <ShoppingCart size={15} />
+                  <ShoppingCart size={15} className="shrink-0" />
                   {cartItems.length}{" "}
                   {cartItems.length === 1 ? "Item Added" : "Items Added"}
                 </span>
-                <span className="text-xs text-red-100">
+                <span className="text-xs text-red-100 truncate">
                   Tap to view plate & bonus lore
                 </span>
               </div>
-              <span className="bg-white text-[#E23744] px-3.5 py-2 rounded-lg font-bold text-xs shadow-sm flex items-center gap-1 uppercase tracking-wide">
+              <span className="bg-white text-[#E23744] px-3 sm:px-3.5 py-2 rounded-lg font-bold text-xs shadow-sm flex items-center gap-1 uppercase tracking-wide shrink-0">
                 View Cart <ChevronRight size={15} />
               </span>
             </button>
           </div>
         )}
 
+        {/* Cart Drawer (Bottom Sheet on Mobile, Centered Modal on Tablet/Desktop) */}
         {isCartOpen && (
-          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-[1px]">
-            <div className="w-full max-w-md bg-gray-50 rounded-t-3xl shadow-2xl max-h-[85vh] flex flex-col overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-[1px] md:p-4">
+            <div className="w-full max-w-md md:max-w-lg bg-gray-50 rounded-t-3xl md:rounded-3xl shadow-2xl max-h-[85vh] flex flex-col overflow-hidden">
               <div className="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="font-black text-gray-900 text-base flex items-center gap-2">
@@ -829,15 +899,15 @@ I’m open to exploring pretty much anything across marketing, product, tech, op
                         key={`cart-${item.id}`}
                         className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
                       >
-                        <div className="flex items-start gap-2.5">
+                        <div className="flex items-start gap-2.5 min-w-0">
                           <div className="mt-1">
                             <VegIcon />
                           </div>
-                          <div>
-                            <div className="font-bold text-sm text-gray-800">
+                          <div className="min-w-0">
+                            <div className="font-bold text-sm text-gray-800 truncate">
                               {item.title}
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 truncate">
                               {item.subtitle}
                             </div>
                           </div>
@@ -912,7 +982,7 @@ I’m open to exploring pretty much anything across marketing, product, tech, op
                 </div>
               </div>
 
-              <div className="bg-white p-4 border-t border-gray-200 flex gap-2.5">
+              <div className="bg-white p-4 border-t border-gray-200 flex flex-col sm:flex-row gap-2.5">
                 <button
                   onClick={handleWhatsAppCheckout}
                   className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
@@ -932,20 +1002,22 @@ I’m open to exploring pretty much anything across marketing, product, tech, op
           </div>
         )}
 
+        {/* Share Toast */}
         {copiedToast && (
-          <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg">
+          <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap">
             Menu link copied! Ready to share with your team 📋
           </div>
         )}
 
+        {/* Back Button Easter Egg Modal */}
         {showBackPopup && (
           <div
             onClick={() => setShowBackPopup(false)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[1px] px-6"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[1px] px-4"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border border-gray-100"
+              className="bg-white rounded-3xl p-6 max-w-xs sm:max-w-sm w-full text-center shadow-2xl border border-gray-100"
             >
               <div className="w-12 h-12 bg-red-50 text-[#E23744] rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
                 🍽️
