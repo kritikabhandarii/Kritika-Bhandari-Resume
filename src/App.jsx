@@ -509,20 +509,20 @@ export default function ZomatoResume() {
         {/* Main Content Area */}
         <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-none">
           <div className="max-w-3xl lg:max-w-7xl mx-auto lg:flex lg:items-start lg:gap-10 lg:px-8 lg:pb-8">
-            {/* LEFT COLUMN (Profile Info & Bio) */}
+            {/* LEFT COLUMN (Profile Info & Bio - No overflow-y-auto so avatar never clips!) */}
             <div
-              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-5.5rem)] lg:overflow-y-auto hide-scrollbar ${
+              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
                 trimmedQuery ? "pb-3" : "pb-6"
               }`}
             >
-              {/* Overlapping Portrait Avatar: z-30 keeps the full portrait above the banner right from initial load */}
+              {/* Overlapping Portrait Avatar */}
               {!trimmedQuery && (
-                <div className="hidden md:block relative z-30 -mt-16 lg:-mt-16 mb-4 pt-1">
+                <div className="hidden md:block relative z-30 -mt-16 lg:-mt-16 mb-4">
                   <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-gray-100">
                     <img
                       src="/images/kritika.png"
                       alt="Kritika Bhandari"
-                      className="w-full h-full object-cover object-[center_22%]"
+                      className="w-full h-full object-cover object-top"
                     />
                   </div>
                 </div>
