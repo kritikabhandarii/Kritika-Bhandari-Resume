@@ -258,6 +258,18 @@ export default function ZomatoResume() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock background scroll when modals are open
+  useEffect(() => {
+    if (isCartOpen || showBackPopup) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen, showBackPopup]);
+
   const toggleCartItem = (item) => {
     setCartItems((prev) => {
       const exists = prev.some((i) => i.id === item.id);
@@ -313,7 +325,7 @@ export default function ZomatoResume() {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = 140;
+      const offset = window.innerWidth >= 1024 ? 95 : 140;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -330,9 +342,9 @@ export default function ZomatoResume() {
   const trimmedQuery = searchQuery.trim().toLowerCase();
 
   return (
-    <div className="min-h-screen bg-gray-100/80 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24">
+    <div className="min-h-dvh bg-gray-100 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24 lg:py-6 lg:px-6">
       {/* Responsive Container: Mobile -> Tablet -> Desktop */}
-      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-screen shadow-2xl relative overflow-x-clip">
+      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-dvh lg:min-h-0 lg:rounded-3xl shadow-xl relative overflow-x-clip">
         {/* Sticky Top Navbar */}
         <div
           className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -446,29 +458,29 @@ export default function ZomatoResume() {
           )}
         </div>
 
-        {/* Hero Banner */}
+        {/* Hero Banner (Adjusted focal point so face stays centered on wide screens) */}
         <div
-          className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 ${
-            trimmedQuery ? "h-28" : "h-64 md:h-80 lg:h-96"
+          className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 lg:rounded-t-3xl overflow-hidden ${
+            trimmedQuery ? "h-28" : "h-64 md:h-72 lg:h-80"
           }`}
         >
           <img
             src="/images/kritika.png"
             alt="Kritika Bhandari"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-[center_22%]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/15 to-black/30" />
         </div>
 
         {/* Main Content Area: Single column on mobile/tablet, 2-column split on desktop (lg:) */}
-        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:flex lg:items-start lg:gap-8 lg:px-6 lg:pt-8">
+        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pt-8">
           {/* LEFT COLUMN (Profile Info & Bio - Sticky on Desktop) */}
           <div
-            className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[360px] xl:w-[400px] lg:shrink-0 lg:sticky lg:top-28 ${
+            className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
               trimmedQuery ? "pb-3" : "pb-6"
             }`}
           >
-            {/* Search Input (Visible on Mobile/Tablet here; shown on Right Column on Desktop) */}
+            {/* Mobile/Tablet Search Input */}
             <div className={`lg:hidden ${trimmedQuery ? "mb-1" : "mb-5"}`}>
               <div className="bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
                 <Search size={18} className="text-[#E23744] shrink-0" />
@@ -477,12 +489,12 @@ export default function ZomatoResume() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search 'n8n workflows' or 'CRM'..."
-                  className="w-full min-w-0 bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
+                  className="w-full min-w-0 bg-transparent outline-none text-base sm:text-sm text-gray-800 placeholder:text-gray-400"
                 />
                 {searchQuery ? (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="text-gray-400 hover:text-gray-600 p-0.5 shrink-0"
+                    className="text-gray-400 hover:text-gray-600 p-1 shrink-0"
                   >
                     <X size={16} />
                   </button>
@@ -500,98 +512,96 @@ export default function ZomatoResume() {
               </div>
             </div>
 
-            {(!trimmedQuery || true) && (
-              <div className={trimmedQuery ? "hidden lg:block" : "block"}>
-                <div className="flex justify-between items-start gap-3">
-                  <div className="min-w-0">
-                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 leading-tight">
-                      KRITIKA BHANDARI
-                    </h1>
-                    <p className="text-gray-500 text-xs sm:text-sm mt-1.5 mb-3">
-                      Aspiring Product Operations | CRM Implementation | AI
-                      Automation Enthusiast
-                    </p>
-                    <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 bg-gray-100 w-fit px-2.5 py-1 rounded-md">
-                      <Clock size={12} className="shrink-0" />
-                      <span>Available to Join (March–June 2027)</span>
-                      <span className="text-gray-300">|</span>
-                      <span>Thane, MH</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2.5 py-1.5 shadow-md shrink-0">
-                    <div className="flex items-center gap-1 font-bold text-sm">
-                      <span>5.0</span>
-                      <Star size={12} className="fill-white" />
-                    </div>
-                    <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
-                      Top Rated
-                    </div>
-                  </div>
-                </div>
-
-                {/* Contact Action Buttons */}
-                <div className="flex items-center gap-2.5 sm:gap-3 mt-6 border-b border-gray-100 pb-6 md:max-w-md lg:max-w-none">
-                  <a
-                    href="https://www.linkedin.com/in/kritika-bhandari/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                  >
-                    <Briefcase size={18} className="text-[#0A66C2]" />
-                    <span className="text-xs font-semibold text-gray-700">
-                      LinkedIn
-                    </span>
-                  </a>
-                  <a
-                    href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                  >
-                    <Mail size={18} className="text-gray-700" />
-                    <span className="text-xs font-semibold text-gray-700">
-                      Email
-                    </span>
-                  </a>
-                  <a
-                    href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                  >
-                    <MessageCircle size={18} className="text-green-600" />
-                    <span className="text-xs font-semibold text-gray-700">
-                      WhatsApp
-                    </span>
-                  </a>
-                </div>
-
-                {/* Bio */}
-                <div className="py-4 border-b border-gray-100 lg:border-none flex gap-3">
-                  <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    Hi! I’m an MBA student looking for a summer internship from
-                    March to June. I started out in marketing but found myself
-                    increasingly curious about everything happening behind the
-                    scenes, from processes and operations to technology and
-                    automation. I’m currently experimenting with n8n, CRM
-                    setups, AI workflows, and finding ways to make things run a
-                    little smoother. I love creativity, problem-solving, trying
-                    new things, and learning by doing. I’m open to exploring
-                    pretty much anything across marketing, product, tech,
-                    operations, automation, or wherever I can contribute, learn,
-                    and get my hands dirty. Always up for interesting ideas and
-                    building cool things! (P.S. Pizza By The Bay is my go-to
-                    restaurant recommendation. No debate.)
+            <div className={trimmedQuery ? "hidden lg:block" : "block"}>
+              <div className="flex justify-between items-start gap-3">
+                <div className="min-w-0">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 leading-tight">
+                    KRITIKA BHANDARI
+                  </h1>
+                  <p className="text-gray-500 text-xs sm:text-sm mt-1.5 mb-3">
+                    Aspiring Product Operations | CRM Implementation | AI
+                    Automation Enthusiast
                   </p>
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 bg-gray-100 w-fit px-2.5 py-1 rounded-md">
+                    <Clock size={12} className="shrink-0" />
+                    <span>Available to Join (March–June 2027)</span>
+                    <span className="text-gray-300">|</span>
+                    <span>Thane, MH</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2.5 py-1.5 shadow-md shrink-0">
+                  <div className="flex items-center gap-1 font-bold text-sm">
+                    <span>5.0</span>
+                    <Star size={12} className="fill-white" />
+                  </div>
+                  <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
+                    Top Rated
+                  </div>
                 </div>
               </div>
-            )}
+
+              {/* Contact Action Buttons */}
+              <div className="flex items-center gap-2.5 sm:gap-3 mt-6 border-b border-gray-100 pb-6 md:max-w-md lg:max-w-none">
+                <a
+                  href="https://www.linkedin.com/in/kritika-bhandari/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                >
+                  <Briefcase size={18} className="text-[#0A66C2]" />
+                  <span className="text-xs font-semibold text-gray-700">
+                    LinkedIn
+                  </span>
+                </a>
+                <a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                >
+                  <Mail size={18} className="text-gray-700" />
+                  <span className="text-xs font-semibold text-gray-700">
+                    Email
+                  </span>
+                </a>
+                <a
+                  href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                >
+                  <MessageCircle size={18} className="text-green-600" />
+                  <span className="text-xs font-semibold text-gray-700">
+                    WhatsApp
+                  </span>
+                </a>
+              </div>
+
+              {/* Bio */}
+              <div className="py-4 border-b border-gray-100 lg:border-none flex gap-3">
+                <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  Hi! I’m an MBA student looking for a summer internship from
+                  March to June. I started out in marketing but found myself
+                  increasingly curious about everything happening behind the
+                  scenes, from processes and operations to technology and
+                  automation. I’m currently experimenting with n8n, CRM setups,
+                  AI workflows, and finding ways to make things run a little
+                  smoother. I love creativity, problem-solving, trying new
+                  things, and learning by doing. I’m open to exploring pretty
+                  much anything across marketing, product, tech, operations,
+                  automation, or wherever I can contribute, learn, and get my
+                  hands dirty. Always up for interesting ideas and building cool
+                  things! (P.S. Pizza By The Bay is my go-to restaurant
+                  recommendation. No debate.)
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu Grid) */}
-          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-0 pb-32">
+          {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu List) */}
+          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-0 pb-28 lg:pb-12">
             {/* Desktop Search Bar */}
             <div className="hidden lg:block mb-5">
               <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors shadow-sm">
@@ -606,7 +616,7 @@ export default function ZomatoResume() {
                 {searchQuery ? (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="text-gray-400 hover:text-gray-600 p-0.5"
+                    className="text-gray-400 hover:text-gray-600 p-1"
                   >
                     <X size={16} />
                   </button>
@@ -675,17 +685,17 @@ export default function ZomatoResume() {
                     </span>
                   </h2>
 
-                  {/* 1 column on Mobile, 2 columns on Tablet/Desktop */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+                  {/* 1 col on Mobile & Desktop Sidebar Layout, 2 cols on Tablet (md only) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 md:gap-4 lg:gap-0">
                     {filteredItems.map((item, index) => {
                       const isAdded = cartItems.some((i) => i.id === item.id);
                       return (
                         <div
                           key={item.id}
-                          className={`py-5 md:p-4 flex gap-3 sm:gap-4 md:border md:border-gray-100 md:rounded-2xl md:hover:shadow-md md:transition-shadow bg-white ${
+                          className={`py-5 md:p-4 lg:px-2 lg:py-5 flex gap-3 sm:gap-4 md:border md:border-gray-100 md:rounded-2xl lg:border-x-0 lg:border-t-0 lg:rounded-none lg:hover:bg-gray-50/70 transition-colors bg-white ${
                             index !== filteredItems.length - 1
-                              ? "border-b border-dashed border-gray-200 md:border-solid"
-                              : ""
+                              ? "border-b border-dashed border-gray-200 md:border-solid lg:border-dashed"
+                              : "lg:border-b-0"
                           }`}
                         >
                           <div className="flex-1 min-w-0">
@@ -698,7 +708,7 @@ export default function ZomatoResume() {
                                 </span>
                               )}
                             </div>
-                            <h3 className="font-bold text-gray-800 text-[15px] leading-tight mb-1">
+                            <h3 className="font-bold text-gray-800 text-[15px] lg:text-base leading-tight mb-1">
                               {item.title}
                             </h3>
                             <div className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
@@ -712,7 +722,7 @@ export default function ZomatoResume() {
                             )}
 
                             {item.desc && (
-                              <p className="text-xs text-gray-500 leading-relaxed line-clamp-3 md:line-clamp-4">
+                              <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed line-clamp-3 lg:line-clamp-none">
                                 {item.desc}
                               </p>
                             )}
@@ -729,7 +739,7 @@ export default function ZomatoResume() {
                             )}
                           </div>
 
-                          {/* Item Thumbnail & Add Button (Responsive width for small phones) */}
+                          {/* Item Thumbnail & Add Button */}
                           <div className="w-24 sm:w-[110px] shrink-0 flex flex-col items-center">
                             <div className="w-24 h-24 sm:w-[110px] sm:h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
                               {item.logo ? (
@@ -832,7 +842,7 @@ export default function ZomatoResume() {
 
         {/* Sticky Floating Cart Bar */}
         {cartItems.length > 0 && !isCartOpen && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] md:max-w-xl z-40">
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2rem)] max-w-[calc(28rem-2rem)] md:max-w-xl z-40 pb-[env(safe-area-inset-bottom)]">
             <button
               onClick={() => setIsCartOpen(true)}
               className="w-full bg-[#E23744] hover:bg-[#d32f3c] rounded-xl shadow-2xl p-3.5 flex items-center justify-between text-white active:scale-[0.99] transition-all text-left"
@@ -857,7 +867,7 @@ export default function ZomatoResume() {
         {/* Cart Drawer (Bottom Sheet on Mobile, Centered Modal on Tablet/Desktop) */}
         {isCartOpen && (
           <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-[1px] md:p-4">
-            <div className="w-full max-w-md md:max-w-lg bg-gray-50 rounded-t-3xl md:rounded-3xl shadow-2xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="w-full max-w-md md:max-w-lg bg-gray-50 rounded-t-3xl md:rounded-3xl shadow-2xl max-h-[85dvh] flex flex-col overflow-hidden">
               <div className="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="font-black text-gray-900 text-base flex items-center gap-2">
@@ -982,7 +992,7 @@ export default function ZomatoResume() {
                 </div>
               </div>
 
-              <div className="bg-white p-4 border-t border-gray-200 flex flex-col sm:flex-row gap-2.5">
+              <div className="bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] border-t border-gray-200 flex flex-col sm:flex-row gap-2.5">
                 <button
                   onClick={handleWhatsAppCheckout}
                   className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs py-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
