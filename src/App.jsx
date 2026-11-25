@@ -250,11 +250,28 @@ export default function ZomatoResume() {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
 
+  const categories = [
+    { name: "Experience", icon: Briefcase, id: "experience" },
+    { name: "Education", icon: GraduationCap, id: "education" },
+    { name: "Skills", icon: Sparkles, id: "skills" },
+    { name: "Interests", icon: Heart, id: "interests" },
+  ];
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 100);
+
+      // Automatically update activeTab while scrolling smoothly
+      const scrollPosition = window.scrollY + (window.innerWidth >= 1024 ? 140 : 180);
+      for (let i = categories.length - 1; i >= 0; i--) {
+        const section = document.getElementById(categories[i].id);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveTab(categories[i].name);
+          break;
+        }
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -315,17 +332,10 @@ export default function ZomatoResume() {
     setTimeout(() => setCopiedToast(false), 2500);
   };
 
-  const categories = [
-    { name: "Experience", icon: Briefcase, id: "experience" },
-    { name: "Education", icon: GraduationCap, id: "education" },
-    { name: "Skills", icon: Sparkles, id: "skills" },
-    { name: "Interests", icon: Heart, id: "interests" },
-  ];
-
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = window.innerWidth >= 1024 ? 95 : 140;
+      const offset = window.innerWidth >= 1024 ? 95 : 135;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -342,18 +352,15 @@ export default function ZomatoResume() {
   const trimmedQuery = searchQuery.trim().toLowerCase();
 
   return (
-    <div className="min-h-dvh bg-gray-100 font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24 lg:py-8 lg:px-6">
-      {/* Main Card Container */}
-      <div className="w-full max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-white min-h-dvh lg:min-h-0 lg:rounded-3xl shadow-xl relative">
+    <div className="min-h-dvh bg-white font-sans text-gray-800 selection:bg-red-100 selection:text-red-900 pb-24">
+      <div className="w-full bg-white min-h-dvh relative">
         {/* Sticky Top Navbar */}
         <div
           className={`sticky top-0 z-50 transition-all duration-300 ${
-            scrolled
-              ? "bg-white shadow-md py-3 lg:rounded-t-3xl"
-              : "bg-transparent pt-4 pb-2"
+            scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 py-3" : "bg-transparent pt-4 pb-2"
           }`}
         >
-          <div className="px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
             <button
               onClick={() => {
                 if (searchQuery) {
@@ -371,17 +378,36 @@ export default function ZomatoResume() {
               <ArrowLeft size={20} className="sm:w-[22px] sm:h-[22px]" />
             </button>
 
-            <div
-              className={`flex-1 min-w-0 transition-all duration-300 ${
-                scrolled ? "opacity-100" : "opacity-0 hidden"
-              }`}
-            >
-              <h1 className="font-bold text-base sm:text-lg truncate text-gray-900">
-                Kritika Bhandari
-              </h1>
-            </div>
+            {/* Scrolled Header Center Content: Name on Mobile/Tablet; Clean Category Tabs on Desktop */}
+            {scrolled ? (
+              <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
+                <h1 className="font-bold text-base sm:text-lg truncate text-gray-900 lg:hidden">
+                  Kritika Bhandari
+                </h1>
 
-            {!scrolled && (
+                {/* Desktop Single-Row Sticky Nav Tabs (Prevents tall header from cutting off left sidebar) */}
+                {!trimmedQuery && (
+                  <div className="hidden lg:flex items-center gap-6">
+                    <span className="font-black text-base text-gray-900 tracking-tight pr-4 border-r border-gray-200">
+                      Kritika Bhandari
+                    </span>
+                    {categories.map((cat) => (
+                      <button
+                        key={`desk-nav-${cat.id}`}
+                        onClick={() => scrollToSection(cat.id)}
+                        className={`py-1 text-sm font-semibold border-b-2 transition-colors ${
+                          activeTab === cat.name
+                            ? "border-[#E23744] text-[#E23744]"
+                            : "border-transparent text-gray-500 hover:text-gray-900"
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
               <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-white drop-shadow-md">
                   <MapPin
@@ -436,10 +462,10 @@ export default function ZomatoResume() {
             </div>
           </div>
 
-          {/* Scrolled Category Tabs */}
+          {/* Mobile/Tablet Scrolled Category Tabs (Hidden on Desktop since Desktop uses single-row tabs above) */}
           {!trimmedQuery && (
             <div
-              className={`px-3 sm:px-6 mt-3 flex overflow-x-auto hide-scrollbar gap-4 sm:gap-6 transition-all duration-300 ${
+              className={`lg:hidden px-3 sm:px-6 mt-3 flex overflow-x-auto hide-scrollbar gap-4 sm:gap-6 transition-all duration-300 ${
                 scrolled ? "block border-t border-gray-100 pt-3" : "hidden"
               }`}
             >
@@ -460,13 +486,13 @@ export default function ZomatoResume() {
           )}
         </div>
 
-        {/* Hero Cover Banner: Lush ambient greenery banner on wide screens, direct full-bleed on mobile */}
+        {/* Hero Cover Banner */}
         <div
-          className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 lg:rounded-t-3xl overflow-hidden ${
-            trimmedQuery ? "h-28" : "h-56 md:h-64 lg:h-72"
+          className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 overflow-hidden ${
+            trimmedQuery ? "h-28" : "h-64 md:h-64 lg:h-72"
           }`}
         >
-          {/* Ambient greenery backdrop (blurred & zoomed into the trees/foliage on tablet/desktop) */}
+          {/* Ambient greenery backdrop on tablet & desktop */}
           <img
             src="/images/kritika.png"
             alt=""
@@ -484,383 +510,393 @@ export default function ZomatoResume() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/15 to-black/40 pointer-events-none" />
         </div>
 
-        {/* Main Content Area: Clean white background, zero grey corner gaps */}
-        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-b-3xl lg:flex lg:items-start lg:gap-8 lg:px-8 lg:pb-8">
-          {/* LEFT COLUMN (Profile Info & Bio - Sticky on Desktop) */}
-          <div
-            className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-24 ${
-              trimmedQuery ? "pb-3" : "pb-6"
-            }`}
-          >
-            {/* Desktop Overlapping Portrait Avatar (Uncropped, crisp & prominent) */}
-            {!trimmedQuery && (
-              <div className="hidden md:block -mt-20 lg:-mt-24 mb-4">
-                <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-gray-100">
-                  <img
-                    src="/images/kritika.png"
-                    alt="Kritika Bhandari"
-                    className="w-full h-full object-cover object-[center_28%]"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Mobile/Tablet Search Input */}
-            <div className={`lg:hidden ${trimmedQuery ? "mb-1" : "mb-5"}`}>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
-                <Search size={18} className="text-[#E23744] shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 'n8n workflows' or 'CRM'..."
-                  className="w-full min-w-0 bg-transparent outline-none text-base sm:text-sm text-gray-800 placeholder:text-gray-400"
-                />
-                {searchQuery ? (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="text-gray-400 hover:text-gray-600 p-1 shrink-0"
-                  >
-                    <X size={16} />
-                  </button>
-                ) : (
-                  <a
-                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
-                    target="_blank"
-                    rel="noreferrer"
-                    title="Schedule a quick chat on Google Calendar"
-                    className="border-l pl-2.5 border-gray-200 hover:opacity-75 transition-opacity flex items-center shrink-0"
-                  >
-                    <Clock size={18} className="text-[#E23744]" />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            <div className={trimmedQuery ? "hidden lg:block" : "block"}>
-              <div className="flex justify-between items-start gap-3">
-                <div className="min-w-0">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 leading-tight">
-                    KRITIKA BHANDARI
-                  </h1>
-                  <p className="text-gray-500 text-xs sm:text-sm mt-1.5 mb-3">
-                    Aspiring Product Operations | CRM Implementation | AI
-                    Automation Enthusiast
-                  </p>
-                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 bg-gray-100 w-fit px-2.5 py-1 rounded-md">
-                    <Clock size={12} className="shrink-0" />
-                    <span>Available to Join (March–June 2027)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>Thane, MH</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2.5 py-1.5 shadow-md shrink-0">
-                  <div className="flex items-center gap-1 font-bold text-sm">
-                    <span>5.0</span>
-                    <Star size={12} className="fill-white" />
-                  </div>
-                  <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
-                    Top Rated
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Action Buttons */}
-              <div className="flex items-center gap-2.5 sm:gap-3 mt-6 border-b border-gray-100 pb-6 md:max-w-md lg:max-w-none">
-                <a
-                  href="https://www.linkedin.com/in/kritika-bhandari/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <Briefcase size={18} className="text-[#0A66C2]" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    LinkedIn
-                  </span>
-                </a>
-                <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <Mail size={18} className="text-gray-700" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    Email
-                  </span>
-                </a>
-                <a
-                  href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
-                >
-                  <MessageCircle size={18} className="text-green-600" />
-                  <span className="text-xs font-semibold text-gray-700">
-                    WhatsApp
-                  </span>
-                </a>
-              </div>
-
-              {/* Bio */}
-              <div className="py-4 border-b border-gray-100 lg:border-none flex gap-3">
-                <Info size={20} className="text-gray-400 shrink-0 mt-0.5" />
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  Hi! I’m an MBA student looking for a summer internship from
-                  March to June. I started out in marketing but found myself
-                  increasingly curious about everything happening behind the
-                  scenes, from processes and operations to technology and
-                  automation. I’m currently experimenting with n8n, CRM setups,
-                  AI workflows, and finding ways to make things run a little
-                  smoother. I love creativity, problem-solving, trying new
-                  things, and learning by doing. I’m open to exploring pretty
-                  much anything across marketing, product, tech, operations,
-                  automation, or wherever I can contribute, learn, and get my
-                  hands dirty. Always up for interesting ideas and building cool
-                  things! (P.S. Pizza By The Bay is my go-to restaurant
-                  recommendation. No debate.)
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu List) */}
-          <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-8 pb-28 lg:pb-4">
-            {/* Desktop Search Bar */}
-            <div className="hidden lg:block mb-5">
-              <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors shadow-sm">
-                <Search size={18} className="text-[#E23744] shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 'n8n workflows', 'CRM', 'MBA', or 'Procreate'..."
-                  className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
-                />
-                {searchQuery ? (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="text-gray-400 hover:text-gray-600 p-1"
-                  >
-                    <X size={16} />
-                  </button>
-                ) : (
-                  <a
-                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
-                    target="_blank"
-                    rel="noreferrer"
-                    title="Schedule a quick chat on Google Calendar"
-                    className="border-l pl-3 border-gray-200 hover:opacity-75 transition-opacity flex items-center gap-1.5 text-xs font-semibold text-[#E23744] shrink-0"
-                  >
-                    <Clock size={16} />
-                    <span>Book Chat</span>
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Inline Category Filter Chips */}
-            {!scrolled && !trimmedQuery && (
-              <div className="px-4 sm:px-6 lg:px-0 py-3.5 flex overflow-x-auto hide-scrollbar gap-2.5 sm:gap-3 bg-white lg:bg-transparent mb-2 shadow-sm lg:shadow-none sticky top-[68px] lg:static z-40">
-                {categories.map((cat) => (
-                  <button
-                    key={`inline-${cat.id}`}
-                    onClick={() => scrollToSection(cat.id)}
-                    className={`whitespace-nowrap px-3.5 sm:px-4 py-1.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
-                      activeTab === cat.name
-                        ? "bg-red-50 border-[#E23744] text-[#E23744]"
-                        : "bg-white border-gray-200 text-gray-600 shadow-sm hover:border-gray-300"
-                    }`}
-                  >
-                    <cat.icon size={15} />
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Menu Sections */}
-            {Object.entries(ResumeData).map(([key, items]) => {
-              const filteredItems = trimmedQuery
-                ? items.filter(
-                    (item) =>
-                      item.title.toLowerCase().includes(trimmedQuery) ||
-                      item.subtitle.toLowerCase().includes(trimmedQuery) ||
-                      (item.desc &&
-                        item.desc.toLowerCase().includes(trimmedQuery)) ||
-                      (item.tag &&
-                        item.tag.toLowerCase().includes(trimmedQuery))
-                  )
-                : items;
-
-              if (filteredItems.length === 0) return null;
-              const sectionTitle = key.charAt(0).toUpperCase() + key.slice(1);
-
-              return (
+        {/* Main Content Area */}
+        <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-none">
+          <div className="max-w-3xl lg:max-w-7xl mx-auto lg:flex lg:items-start lg:gap-10 lg:px-8 lg:pb-8">
+            {/* LEFT COLUMN (Profile Info & Bio - Properly offset & self-contained on Desktop) */}
+            <div
+              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-2 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-5.5rem)] lg:overflow-y-auto hide-scrollbar ${
+                trimmedQuery ? "pb-3" : "pb-6"
+              }`}
+            >
+              {/* Overlapping Portrait Avatar: Moves smoothly out of the way when scrolled on desktop so nothing gets clipped */}
+              {!trimmedQuery && (
                 <div
-                  key={key}
-                  id={key}
-                  className="bg-white mb-3 lg:mb-6 pt-6 pb-2 lg:pb-6 px-4 sm:px-6 lg:p-6 shadow-sm lg:border lg:border-gray-100 lg:rounded-2xl scroll-mt-36"
+                  className={`hidden md:block transition-all duration-300 mb-4 ${
+                    scrolled ? "mt-0" : "-mt-20 lg:-mt-20"
+                  }`}
                 >
-                  <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
-                    {sectionTitle}
-                    <span className="text-sm font-normal text-gray-400 ml-1">
-                      ({filteredItems.length})
-                    </span>
-                  </h2>
-
-                  {/* 1 col on Mobile & Desktop Sidebar Layout, 2 cols on Tablet (md only) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 md:gap-4 lg:gap-0">
-                    {filteredItems.map((item, index) => {
-                      const isAdded = cartItems.some((i) => i.id === item.id);
-                      return (
-                        <div
-                          key={item.id}
-                          className={`py-5 md:p-4 lg:px-2 lg:py-5 flex gap-3 sm:gap-4 md:border md:border-gray-100 md:rounded-2xl lg:border-x-0 lg:border-t-0 lg:rounded-none lg:hover:bg-gray-50/70 transition-colors bg-white ${
-                            index !== filteredItems.length - 1
-                              ? "border-b border-dashed border-gray-200 md:border-solid lg:border-dashed"
-                              : "lg:border-b-0"
-                          }`}
-                        >
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1.5">
-                              <VegIcon />
-                              {item.tag && (
-                                <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
-                                  <Star size={8} className="fill-[#E23744]" />
-                                  {item.tag}
-                                </span>
-                              )}
-                            </div>
-                            <h3 className="font-bold text-gray-800 text-[15px] lg:text-base leading-tight mb-1">
-                              {item.title}
-                            </h3>
-                            <div className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                              {item.subtitle}
-                            </div>
-
-                            {item.date && (
-                              <div className="text-xs font-semibold text-gray-500 mb-2">
-                                {item.date}
-                              </div>
-                            )}
-
-                            {item.desc && (
-                              <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed line-clamp-3 lg:line-clamp-none">
-                                {item.desc}
-                              </p>
-                            )}
-
-                            {item.link && (
-                              <a
-                                href={item.link}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-block mt-2.5 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2.5 py-1 rounded-md hover:bg-red-50 transition-colors"
-                              >
-                                View Workflow →
-                              </a>
-                            )}
-                          </div>
-
-                          {/* Item Thumbnail & Add Button */}
-                          <div className="w-24 sm:w-[110px] shrink-0 flex flex-col items-center">
-                            <div className="w-24 h-24 sm:w-[110px] sm:h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
-                              {item.logo ? (
-                                <img
-                                  src={item.logo}
-                                  alt={item.subtitle}
-                                  className="w-full h-full object-contain p-2 bg-white"
-                                />
-                              ) : (
-                                <>
-                                  {key === "experience" && (
-                                    <Briefcase
-                                      size={30}
-                                      className="text-red-200"
-                                    />
-                                  )}
-                                  {key === "education" && (
-                                    <GraduationCap
-                                      size={30}
-                                      className="text-red-200"
-                                    />
-                                  )}
-                                  {key === "skills" && (
-                                    <Sparkles
-                                      size={30}
-                                      className="text-red-200"
-                                    />
-                                  )}
-                                  {key === "interests" && (
-                                    <Heart size={30} className="text-red-200" />
-                                  )}
-                                </>
-                              )}
-
-                              <button
-                                onClick={() => toggleCartItem(item)}
-                                className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[88%] font-black text-[11px] sm:text-xs py-1 sm:py-1.5 rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-1 uppercase tracking-wide ${
-                                  isAdded
-                                    ? "bg-[#E23744] text-white border border-[#E23744]"
-                                    : "bg-white text-[#E23744] border border-red-200 hover:bg-red-50"
-                                }`}
-                              >
-                                {isAdded ? (
-                                  <>
-                                    Added{" "}
-                                    <Check size={13} className="stroke-[3]" />
-                                  </>
-                                ) : (
-                                  <>
-                                    Add <Plus size={13} className="stroke-[3]" />
-                                  </>
-                                )}
-                              </button>
-                            </div>
-                            <div className="text-[10px] text-gray-400 mt-1.5 text-center">
-                              {isAdded ? "in your plate" : "customizable"}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                  <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-3xl overflow-hidden border-4 border-white shadow-lg bg-gray-100">
+                    <img
+                      src="/images/kritika.png"
+                      alt="Kritika Bhandari"
+                      className="w-full h-full object-cover object-[center_28%]"
+                    />
                   </div>
-                </div>
-              );
-            })}
-
-            {/* Empty Search State */}
-            {trimmedQuery &&
-              Object.values(ResumeData).every(
-                (items) =>
-                  !items.some(
-                    (item) =>
-                      item.title.toLowerCase().includes(trimmedQuery) ||
-                      item.subtitle.toLowerCase().includes(trimmedQuery) ||
-                      (item.desc &&
-                        item.desc.toLowerCase().includes(trimmedQuery)) ||
-                      (item.tag &&
-                        item.tag.toLowerCase().includes(trimmedQuery))
-                  )
-              ) && (
-                <div className="bg-white py-12 px-4 text-center rounded-2xl border border-gray-100">
-                  <p className="text-sm font-bold text-gray-700">
-                    No dishes found for "{searchQuery}"
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Try searching "HubSpot", "n8n", "Procreate", or "MBA"
-                  </p>
                 </div>
               )}
 
-            {/* Footer */}
-            <div className="py-8 lg:pb-2 flex flex-col items-center justify-center text-gray-400">
-              <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
-                zomato style
+              {/* Mobile/Tablet Search Input */}
+              <div className={`lg:hidden ${trimmedQuery ? "mb-1" : "mb-5"}`}>
+                <div className="bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 focus-within:border-[#E23744] focus-within:bg-white transition-colors">
+                  <Search size={18} className="text-[#E23744] shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search 'n8n workflows' or 'CRM'..."
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-sm text-gray-800 placeholder:text-gray-400"
+                  />
+                  {searchQuery ? (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="text-gray-400 hover:text-gray-600 p-1 shrink-0"
+                    >
+                      <X size={16} />
+                    </button>
+                  ) : (
+                    <a
+                      href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
+                      target="_blank"
+                      rel="noreferrer"
+                      title="Schedule a quick chat on Google Calendar"
+                      className="border-l pl-2.5 border-gray-200 hover:opacity-75 transition-opacity flex items-center shrink-0"
+                    >
+                      <Clock size={18} className="text-[#E23744]" />
+                    </a>
+                  )}
+                </div>
               </div>
-              <p className="text-xs">End of Resume</p>
+
+              <div className={trimmedQuery ? "hidden lg:block" : "block"}>
+                <div className="flex justify-between items-start gap-3">
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl lg:text-[26px] font-black text-gray-900 leading-tight">
+                      KRITIKA BHANDARI
+                    </h1>
+                    <p className="text-gray-500 text-xs sm:text-sm mt-1.5 mb-3">
+                      Aspiring Product Operations | CRM Implementation | AI
+                      Automation Enthusiast
+                    </p>
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 bg-gray-100 w-fit px-2.5 py-1 rounded-md">
+                      <Clock size={12} className="shrink-0" />
+                      <span>Available to Join (March–June 2027)</span>
+                      <span className="text-gray-300">|</span>
+                      <span>Thane, MH</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center bg-green-700 text-white rounded-lg px-2.5 py-1.5 shadow-md shrink-0">
+                    <div className="flex items-center gap-1 font-bold text-sm">
+                      <span>5.0</span>
+                      <Star size={12} className="fill-white" />
+                    </div>
+                    <div className="text-[9px] border-t border-green-600 pt-0.5 mt-0.5 w-full text-center uppercase tracking-wider">
+                      Top Rated
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Action Buttons */}
+                <div className="flex items-center gap-2.5 sm:gap-3 mt-5 border-b border-gray-100 pb-5 md:max-w-md lg:max-w-none">
+                  <a
+                    href="https://www.linkedin.com/in/kritika-bhandari/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <Briefcase size={18} className="text-[#0A66C2]" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      LinkedIn
+                    </span>
+                  </a>
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=kritikabhandari03@gmail.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <Mail size={18} className="text-gray-700" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      Email
+                    </span>
+                  </a>
+                  <a
+                    href="https://wa.me/917900020593?text=Hi%20Kritika!%20I%20saw%20your%20Zomato%20CV."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2.5 flex flex-col items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                  >
+                    <MessageCircle size={18} className="text-green-600" />
+                    <span className="text-xs font-semibold text-gray-700">
+                      WhatsApp
+                    </span>
+                  </a>
+                </div>
+
+                {/* Bio */}
+                <div className="py-4 border-b border-gray-100 lg:border-none flex gap-3">
+                  <Info size={18} className="text-gray-400 shrink-0 mt-0.5" />
+                  <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed">
+                    Hi! I’m an MBA student looking for a summer internship from
+                    March to June. I started out in marketing but found myself
+                    increasingly curious about everything happening behind the
+                    scenes, from processes and operations to technology and
+                    automation. I’m currently experimenting with n8n, CRM setups,
+                    AI workflows, and finding ways to make things run a little
+                    smoother. I love creativity, problem-solving, trying new
+                    things, and learning by doing. I’m open to exploring pretty
+                    much anything across marketing, product, tech, operations,
+                    automation, or wherever I can contribute, learn, and get my
+                    hands dirty. Always up for interesting ideas and building cool
+                    things! (P.S. Pizza By The Bay is my go-to restaurant
+                    recommendation. No debate.)
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN (Search Bar on Desktop, Category Pills & Menu List) */}
+            <div className="flex-1 min-w-0 bg-gray-100/50 lg:bg-transparent pt-2 lg:pt-8 pb-28 lg:pb-4">
+              {/* Desktop Search Bar */}
+              <div className="hidden lg:block mb-5">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3 focus-within:border-[#E23744] focus-within:bg-white transition-colors shadow-sm">
+                  <Search size={18} className="text-[#E23744] shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search 'n8n workflows', 'CRM', 'MBA', or 'Procreate'..."
+                    className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
+                  />
+                  {searchQuery ? (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="text-gray-400 hover:text-gray-600 p-1"
+                    >
+                      <X size={16} />
+                    </button>
+                  ) : (
+                    <a
+                      href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chat%20with%20Kritika%20Bhandari&add=kritikabhandari03@gmail.com&details=Let's%20connect%20regarding%20Product%20Operations%20/%20Summer%20Internship!"
+                      target="_blank"
+                      rel="noreferrer"
+                      title="Schedule a quick chat on Google Calendar"
+                      className="border-l pl-3 border-gray-200 hover:opacity-75 transition-opacity flex items-center gap-1.5 text-xs font-semibold text-[#E23744] shrink-0"
+                    >
+                      <Clock size={16} />
+                      <span>Book Chat</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Inline Category Filter Chips */}
+              {!scrolled && !trimmedQuery && (
+                <div className="px-4 sm:px-6 lg:px-0 py-3.5 flex overflow-x-auto hide-scrollbar gap-2.5 sm:gap-3 bg-white lg:bg-transparent mb-2 shadow-sm lg:shadow-none sticky top-[68px] lg:static z-40">
+                  {categories.map((cat) => (
+                    <button
+                      key={`inline-${cat.id}`}
+                      onClick={() => scrollToSection(cat.id)}
+                      className={`whitespace-nowrap px-3.5 sm:px-4 py-1.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
+                        activeTab === cat.name
+                          ? "bg-red-50 border-[#E23744] text-[#E23744]"
+                          : "bg-white border-gray-200 text-gray-600 shadow-sm hover:border-gray-300"
+                      }`}
+                    >
+                      <cat.icon size={15} />
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Menu Sections */}
+              {Object.entries(ResumeData).map(([key, items]) => {
+                const filteredItems = trimmedQuery
+                  ? items.filter(
+                      (item) =>
+                        item.title.toLowerCase().includes(trimmedQuery) ||
+                        item.subtitle.toLowerCase().includes(trimmedQuery) ||
+                        (item.desc &&
+                          item.desc.toLowerCase().includes(trimmedQuery)) ||
+                        (item.tag &&
+                          item.tag.toLowerCase().includes(trimmedQuery))
+                    )
+                  : items;
+
+                if (filteredItems.length === 0) return null;
+                const sectionTitle = key.charAt(0).toUpperCase() + key.slice(1);
+
+                return (
+                  <div
+                    key={key}
+                    id={key}
+                    className="bg-white mb-3 lg:mb-6 pt-6 pb-2 lg:pb-6 px-4 sm:px-6 lg:p-6 shadow-sm lg:border lg:border-gray-100 lg:rounded-2xl scroll-mt-24"
+                  >
+                    <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
+                      {sectionTitle}
+                      <span className="text-sm font-normal text-gray-400 ml-1">
+                        ({filteredItems.length})
+                      </span>
+                    </h2>
+
+                    {/* 1 col on Mobile & Desktop Sidebar Layout, 2 cols on Tablet (md only) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 md:gap-4 lg:gap-0">
+                      {filteredItems.map((item, index) => {
+                        const isAdded = cartItems.some((i) => i.id === item.id);
+                        return (
+                          <div
+                            key={item.id}
+                            className={`py-5 md:p-4 lg:px-2 lg:py-5 flex gap-3 sm:gap-4 md:border md:border-gray-100 md:rounded-2xl lg:border-x-0 lg:border-t-0 lg:rounded-none lg:hover:bg-gray-50/70 transition-colors bg-white ${
+                              index !== filteredItems.length - 1
+                                ? "border-b border-dashed border-gray-200 md:border-solid lg:border-dashed"
+                                : "lg:border-b-0"
+                            }`}
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1.5">
+                                <VegIcon />
+                                {item.tag && (
+                                  <span className="text-[10px] uppercase tracking-wider font-bold text-[#E23744] bg-red-50 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                    <Star size={8} className="fill-[#E23744]" />
+                                    {item.tag}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="font-bold text-gray-800 text-[15px] lg:text-base leading-tight mb-1">
+                                {item.title}
+                              </h3>
+                              <div className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                                {item.subtitle}
+                              </div>
+
+                              {item.date && (
+                                <div className="text-xs font-semibold text-gray-500 mb-2">
+                                  {item.date}
+                                </div>
+                              )}
+
+                              {item.desc && (
+                                <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed line-clamp-3 lg:line-clamp-none">
+                                  {item.desc}
+                                </p>
+                              )}
+
+                              {item.link && (
+                                <a
+                                  href={item.link}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="inline-block mt-2.5 text-[11px] font-bold text-[#E23744] border border-[#E23744] px-2.5 py-1 rounded-md hover:bg-red-50 transition-colors"
+                                >
+                                  View Workflow →
+                                </a>
+                              )}
+                            </div>
+
+                            {/* Item Thumbnail & Add Button */}
+                            <div className="w-24 sm:w-[110px] shrink-0 flex flex-col items-center">
+                              <div className="w-24 h-24 sm:w-[110px] sm:h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
+                                {item.logo ? (
+                                  <img
+                                    src={item.logo}
+                                    alt={item.subtitle}
+                                    className="w-full h-full object-contain p-2 bg-white"
+                                  />
+                                ) : (
+                                  <>
+                                    {key === "experience" && (
+                                      <Briefcase
+                                        size={30}
+                                        className="text-red-200"
+                                      />
+                                    )}
+                                    {key === "education" && (
+                                      <GraduationCap
+                                        size={30}
+                                        className="text-red-200"
+                                      />
+                                    )}
+                                    {key === "skills" && (
+                                      <Sparkles
+                                        size={30}
+                                        className="text-red-200"
+                                      />
+                                    )}
+                                    {key === "interests" && (
+                                      <Heart
+                                        size={30}
+                                        className="text-red-200"
+                                      />
+                                    )}
+                                  </>
+                                )}
+
+                                <button
+                                  onClick={() => toggleCartItem(item)}
+                                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[88%] font-black text-[11px] sm:text-xs py-1 sm:py-1.5 rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-1 uppercase tracking-wide ${
+                                    isAdded
+                                      ? "bg-[#E23744] text-white border border-[#E23744]"
+                                      : "bg-white text-[#E23744] border border-red-200 hover:bg-red-50"
+                                  }`}
+                                >
+                                  {isAdded ? (
+                                    <>
+                                      Added{" "}
+                                      <Check size={13} className="stroke-[3]" />
+                                    </>
+                                  ) : (
+                                    <>
+                                      Add{" "}
+                                      <Plus size={13} className="stroke-[3]" />
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                              <div className="text-[10px] text-gray-400 mt-1.5 text-center">
+                                {isAdded ? "in your plate" : "customizable"}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Empty Search State */}
+              {trimmedQuery &&
+                Object.values(ResumeData).every(
+                  (items) =>
+                    !items.some(
+                      (item) =>
+                        item.title.toLowerCase().includes(trimmedQuery) ||
+                        item.subtitle.toLowerCase().includes(trimmedQuery) ||
+                        (item.desc &&
+                          item.desc.toLowerCase().includes(trimmedQuery)) ||
+                        (item.tag &&
+                          item.tag.toLowerCase().includes(trimmedQuery))
+                    )
+                ) && (
+                  <div className="bg-white py-12 px-4 text-center rounded-2xl border border-gray-100">
+                    <p className="text-sm font-bold text-gray-700">
+                      No dishes found for "{searchQuery}"
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Try searching "HubSpot", "n8n", "Procreate", or "MBA"
+                    </p>
+                  </div>
+                )}
+
+              {/* Footer */}
+              <div className="py-8 lg:pb-2 flex flex-col items-center justify-center text-gray-400">
+                <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
+                  zomato style
+                </div>
+                <p className="text-xs">End of Resume</p>
+              </div>
             </div>
           </div>
         </div>
