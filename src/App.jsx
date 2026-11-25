@@ -261,8 +261,8 @@ export default function ZomatoResume() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 100);
 
-      // Automatically update activeTab while scrolling smoothly
-      const scrollPosition = window.scrollY + (window.innerWidth >= 1024 ? 140 : 180);
+      const scrollPosition =
+        window.scrollY + (window.innerWidth >= 1024 ? 140 : 180);
       for (let i = categories.length - 1; i >= 0; i--) {
         const section = document.getElementById(categories[i].id);
         if (section && section.offsetTop <= scrollPosition) {
@@ -275,7 +275,6 @@ export default function ZomatoResume() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock background scroll when modals are open
   useEffect(() => {
     if (isCartOpen || showBackPopup) {
       document.body.style.overflow = "hidden";
@@ -357,7 +356,9 @@ export default function ZomatoResume() {
         {/* Sticky Top Navbar */}
         <div
           className={`sticky top-0 z-50 transition-all duration-300 ${
-            scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 py-3" : "bg-transparent pt-4 pb-2"
+            scrolled
+              ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 py-3"
+              : "bg-transparent pt-4 pb-2"
           }`}
         >
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
@@ -378,14 +379,12 @@ export default function ZomatoResume() {
               <ArrowLeft size={20} className="sm:w-[22px] sm:h-[22px]" />
             </button>
 
-            {/* Scrolled Header Center Content: Name on Mobile/Tablet; Clean Category Tabs on Desktop */}
             {scrolled ? (
               <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
                 <h1 className="font-bold text-base sm:text-lg truncate text-gray-900 lg:hidden">
                   Kritika Bhandari
                 </h1>
 
-                {/* Desktop Single-Row Sticky Nav Tabs (Prevents tall header from cutting off left sidebar) */}
                 {!trimmedQuery && (
                   <div className="hidden lg:flex items-center gap-6">
                     <span className="font-black text-base text-gray-900 tracking-tight pr-4 border-r border-gray-200">
@@ -462,7 +461,6 @@ export default function ZomatoResume() {
             </div>
           </div>
 
-          {/* Mobile/Tablet Scrolled Category Tabs (Hidden on Desktop since Desktop uses single-row tabs above) */}
           {!trimmedQuery && (
             <div
               className={`lg:hidden px-3 sm:px-6 mt-3 flex overflow-x-auto hide-scrollbar gap-4 sm:gap-6 transition-all duration-300 ${
@@ -488,11 +486,10 @@ export default function ZomatoResume() {
 
         {/* Hero Cover Banner */}
         <div
-          className={`relative w-full -mt-16 bg-gray-900 transition-all duration-300 overflow-hidden ${
+          className={`relative z-0 w-full -mt-16 bg-gray-900 transition-all duration-300 overflow-hidden ${
             trimmedQuery ? "h-28" : "h-64 md:h-64 lg:h-72"
           }`}
         >
-          {/* Ambient greenery backdrop on tablet & desktop */}
           <img
             src="/images/kritika.png"
             alt=""
@@ -500,7 +497,6 @@ export default function ZomatoResume() {
             className="hidden md:block w-full h-full object-cover object-[center_15%] scale-150 blur-md brightness-75"
           />
 
-          {/* Mobile keeps the direct full-bleed photo */}
           <img
             src="/images/kritika.png"
             alt="Kritika Bhandari"
@@ -513,24 +509,20 @@ export default function ZomatoResume() {
         {/* Main Content Area */}
         <div className="relative z-10 -mt-6 bg-white rounded-t-3xl lg:rounded-none">
           <div className="max-w-3xl lg:max-w-7xl mx-auto lg:flex lg:items-start lg:gap-10 lg:px-8 lg:pb-8">
-            {/* LEFT COLUMN (Profile Info & Bio - Properly offset & self-contained on Desktop) */}
+            {/* LEFT COLUMN (Profile Info & Bio) */}
             <div
-              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-2 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-5.5rem)] lg:overflow-y-auto hide-scrollbar ${
+              className={`px-4 sm:px-6 lg:px-0 pt-6 lg:pt-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-5.5rem)] lg:overflow-y-auto hide-scrollbar ${
                 trimmedQuery ? "pb-3" : "pb-6"
               }`}
             >
-              {/* Overlapping Portrait Avatar: Moves smoothly out of the way when scrolled on desktop so nothing gets clipped */}
+              {/* Overlapping Portrait Avatar: z-30 keeps the full portrait above the banner right from initial load */}
               {!trimmedQuery && (
-                <div
-                  className={`hidden md:block transition-all duration-300 mb-4 ${
-                    scrolled ? "mt-0" : "-mt-20 lg:-mt-20"
-                  }`}
-                >
-                  <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-3xl overflow-hidden border-4 border-white shadow-lg bg-gray-100">
+                <div className="hidden md:block relative z-30 -mt-16 lg:-mt-16 mb-4 pt-1">
+                  <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-gray-100">
                     <img
                       src="/images/kritika.png"
                       alt="Kritika Bhandari"
-                      className="w-full h-full object-cover object-[center_28%]"
+                      className="w-full h-full object-cover object-[center_22%]"
                     />
                   </div>
                 </div>
@@ -741,7 +733,6 @@ export default function ZomatoResume() {
                       </span>
                     </h2>
 
-                    {/* 1 col on Mobile & Desktop Sidebar Layout, 2 cols on Tablet (md only) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 md:gap-4 lg:gap-0">
                       {filteredItems.map((item, index) => {
                         const isAdded = cartItems.some((i) => i.id === item.id);
@@ -795,7 +786,6 @@ export default function ZomatoResume() {
                               )}
                             </div>
 
-                            {/* Item Thumbnail & Add Button */}
                             <div className="w-24 sm:w-[110px] shrink-0 flex flex-col items-center">
                               <div className="w-24 h-24 sm:w-[110px] sm:h-[110px] rounded-2xl bg-gradient-to-br from-red-50 to-orange-50 border border-gray-100 flex items-center justify-center shadow-sm relative overflow-hidden">
                                 {item.logo ? (
@@ -866,7 +856,6 @@ export default function ZomatoResume() {
                 );
               })}
 
-              {/* Empty Search State */}
               {trimmedQuery &&
                 Object.values(ResumeData).every(
                   (items) =>
@@ -890,7 +879,6 @@ export default function ZomatoResume() {
                   </div>
                 )}
 
-              {/* Footer */}
               <div className="py-8 lg:pb-2 flex flex-col items-center justify-center text-gray-400">
                 <div className="text-2xl font-black italic tracking-tighter opacity-30 mb-2">
                   zomato style
@@ -925,7 +913,7 @@ export default function ZomatoResume() {
           </div>
         )}
 
-        {/* Cart Drawer (Bottom Sheet on Mobile, Centered Modal on Tablet/Desktop) */}
+        {/* Cart Drawer */}
         {isCartOpen && (
           <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-[1px] md:p-4">
             <div className="w-full max-w-md md:max-w-lg bg-gray-50 rounded-t-3xl md:rounded-3xl shadow-2xl max-h-[85dvh] flex flex-col overflow-hidden">
